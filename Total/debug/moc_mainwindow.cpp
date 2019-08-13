@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[20];
-    char stringdata0[258];
+    QByteArrayData data[21];
+    char stringdata0[270];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -39,25 +39,27 @@ QT_MOC_LITERAL(3, 23, 16), // "QVector<QString>"
 QT_MOC_LITERAL(4, 40, 1), // "m"
 QT_MOC_LITERAL(5, 42, 8), // "showInfo"
 QT_MOC_LITERAL(6, 51, 9), // "showInfoT"
-QT_MOC_LITERAL(7, 61, 11), // "receiveData"
+QT_MOC_LITERAL(7, 61, 11), // "showCalTest"
 QT_MOC_LITERAL(8, 73, 15), // "QVector<double>"
 QT_MOC_LITERAL(9, 89, 1), // "d"
-QT_MOC_LITERAL(10, 91, 14), // "receiveMachine"
-QT_MOC_LITERAL(11, 106, 13), // "receiveString"
-QT_MOC_LITERAL(12, 120, 29), // "on_actioninfoMacine_triggered"
-QT_MOC_LITERAL(13, 150, 27), // "on_actioninfoTool_triggered"
-QT_MOC_LITERAL(14, 178, 28), // "on_actioncalculate_triggered"
-QT_MOC_LITERAL(15, 207, 12), // "receiveClear"
-QT_MOC_LITERAL(16, 220, 1), // "a"
-QT_MOC_LITERAL(17, 222, 10), // "receiveStr"
-QT_MOC_LITERAL(18, 233, 1), // "s"
-QT_MOC_LITERAL(19, 235, 22) // "on_pb_caculate_clicked"
+QT_MOC_LITERAL(10, 91, 11), // "receiveData"
+QT_MOC_LITERAL(11, 103, 14), // "receiveMachine"
+QT_MOC_LITERAL(12, 118, 13), // "receiveString"
+QT_MOC_LITERAL(13, 132, 29), // "on_actioninfoMacine_triggered"
+QT_MOC_LITERAL(14, 162, 27), // "on_actioninfoTool_triggered"
+QT_MOC_LITERAL(15, 190, 28), // "on_actioncalculate_triggered"
+QT_MOC_LITERAL(16, 219, 12), // "receiveClear"
+QT_MOC_LITERAL(17, 232, 1), // "a"
+QT_MOC_LITERAL(18, 234, 10), // "receiveStr"
+QT_MOC_LITERAL(19, 245, 1), // "s"
+QT_MOC_LITERAL(20, 247, 22) // "on_pb_caculate_clicked"
 
     },
     "MainWindow\0sendString\0\0QVector<QString>\0"
-    "m\0showInfo\0showInfoT\0receiveData\0"
-    "QVector<double>\0d\0receiveMachine\0"
-    "receiveString\0on_actioninfoMacine_triggered\0"
+    "m\0showInfo\0showInfoT\0showCalTest\0"
+    "QVector<double>\0d\0receiveData\0"
+    "receiveMachine\0receiveString\0"
+    "on_actioninfoMacine_triggered\0"
     "on_actioninfoTool_triggered\0"
     "on_actioncalculate_triggered\0receiveClear\0"
     "a\0receiveStr\0s\0on_pb_caculate_clicked"
@@ -70,33 +72,35 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      12,   14, // methods
+      13,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       3,       // signalCount
+       4,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   74,    2, 0x06 /* Public */,
-       5,    0,   77,    2, 0x06 /* Public */,
-       6,    0,   78,    2, 0x06 /* Public */,
+       1,    1,   79,    2, 0x06 /* Public */,
+       5,    0,   82,    2, 0x06 /* Public */,
+       6,    0,   83,    2, 0x06 /* Public */,
+       7,    2,   84,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       7,    2,   79,    2, 0x08 /* Private */,
-      10,    1,   84,    2, 0x08 /* Private */,
-      11,    1,   87,    2, 0x08 /* Private */,
-      12,    0,   90,    2, 0x08 /* Private */,
-      13,    0,   91,    2, 0x08 /* Private */,
-      14,    0,   92,    2, 0x08 /* Private */,
-      15,    1,   93,    2, 0x08 /* Private */,
-      17,    1,   96,    2, 0x08 /* Private */,
-      19,    0,   99,    2, 0x08 /* Private */,
+      10,    2,   89,    2, 0x08 /* Private */,
+      11,    1,   94,    2, 0x08 /* Private */,
+      12,    1,   97,    2, 0x08 /* Private */,
+      13,    0,  100,    2, 0x08 /* Private */,
+      14,    0,  101,    2, 0x08 /* Private */,
+      15,    0,  102,    2, 0x08 /* Private */,
+      16,    1,  103,    2, 0x08 /* Private */,
+      18,    1,  106,    2, 0x08 /* Private */,
+      20,    0,  109,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    4,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 8, 0x80000000 | 8,    9,    4,
 
  // slots: parameters
     QMetaType::Void, 0x80000000 | 8, 0x80000000 | 3,    9,    4,
@@ -105,8 +109,8 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Double,   16,
-    QMetaType::Void, 0x80000000 | 3,   18,
+    QMetaType::Void, QMetaType::Double,   17,
+    QMetaType::Void, 0x80000000 | 3,   19,
     QMetaType::Void,
 
        0        // eod
@@ -121,15 +125,16 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 0: _t->sendString((*reinterpret_cast< QVector<QString>(*)>(_a[1]))); break;
         case 1: _t->showInfo(); break;
         case 2: _t->showInfoT(); break;
-        case 3: _t->receiveData((*reinterpret_cast< QVector<double>(*)>(_a[1])),(*reinterpret_cast< QVector<QString>(*)>(_a[2]))); break;
-        case 4: _t->receiveMachine((*reinterpret_cast< QVector<double>(*)>(_a[1]))); break;
-        case 5: _t->receiveString((*reinterpret_cast< QVector<QString>(*)>(_a[1]))); break;
-        case 6: _t->on_actioninfoMacine_triggered(); break;
-        case 7: _t->on_actioninfoTool_triggered(); break;
-        case 8: _t->on_actioncalculate_triggered(); break;
-        case 9: _t->receiveClear((*reinterpret_cast< double(*)>(_a[1]))); break;
-        case 10: _t->receiveStr((*reinterpret_cast< QVector<QString>(*)>(_a[1]))); break;
-        case 11: _t->on_pb_caculate_clicked(); break;
+        case 3: _t->showCalTest((*reinterpret_cast< QVector<double>(*)>(_a[1])),(*reinterpret_cast< QVector<double>(*)>(_a[2]))); break;
+        case 4: _t->receiveData((*reinterpret_cast< QVector<double>(*)>(_a[1])),(*reinterpret_cast< QVector<QString>(*)>(_a[2]))); break;
+        case 5: _t->receiveMachine((*reinterpret_cast< QVector<double>(*)>(_a[1]))); break;
+        case 6: _t->receiveString((*reinterpret_cast< QVector<QString>(*)>(_a[1]))); break;
+        case 7: _t->on_actioninfoMacine_triggered(); break;
+        case 8: _t->on_actioninfoTool_triggered(); break;
+        case 9: _t->on_actioncalculate_triggered(); break;
+        case 10: _t->receiveClear((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 11: _t->receiveStr((*reinterpret_cast< QVector<QString>(*)>(_a[1]))); break;
+        case 12: _t->on_pb_caculate_clicked(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -146,7 +151,6 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<int*>(_a[0]) = -1; break;
             case 1:
-                *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QVector<QString> >(); break;
             case 0:
                 *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QVector<double> >(); break;
             }
@@ -154,6 +158,8 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 4:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<int*>(_a[0]) = -1; break;
+            case 1:
+                *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QVector<QString> >(); break;
             case 0:
                 *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QVector<double> >(); break;
             }
@@ -162,10 +168,17 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<int*>(_a[0]) = -1; break;
             case 0:
+                *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QVector<double> >(); break;
+            }
+            break;
+        case 6:
+            switch (*reinterpret_cast<int*>(_a[1])) {
+            default: *reinterpret_cast<int*>(_a[0]) = -1; break;
+            case 0:
                 *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QVector<QString> >(); break;
             }
             break;
-        case 10:
+        case 11:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<int*>(_a[0]) = -1; break;
             case 0:
@@ -193,6 +206,13 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
             typedef void (MainWindow::*_t)();
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MainWindow::showInfoT)) {
                 *result = 2;
+                return;
+            }
+        }
+        {
+            typedef void (MainWindow::*_t)(QVector<double> , QVector<double> );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&MainWindow::showCalTest)) {
+                *result = 3;
                 return;
             }
         }
@@ -224,13 +244,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 12)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 12;
+        _id -= 13;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 12)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 12;
+        _id -= 13;
     }
     return _id;
 }
@@ -252,6 +272,13 @@ void MainWindow::showInfo()
 void MainWindow::showInfoT()
 {
     QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
+}
+
+// SIGNAL 3
+void MainWindow::showCalTest(QVector<double> _t1, QVector<double> _t2)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
+    QMetaObject::activate(this, &staticMetaObject, 3, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

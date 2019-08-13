@@ -42,6 +42,7 @@ signals:
     void sendString(QVector<QString> m);
     void showInfo();
     void showInfoT();
+    void showCalTest(QVector<double> d,QVector<double> m);
 
 
 private slots:

@@ -1,5 +1,6 @@
 ﻿#include "cal.h"
 #include "mainwindow.h"
+#include "chartdlg.h"
 #include <qmath.h>
 #include <QDateTime>
 #include <QDebug>
@@ -7,6 +8,7 @@
 #include <QTextStream>
 #include <QFile>
 #include <QDebug>
+
 #pragma execution_character_set("utf-8")
 cal::cal()
 {
@@ -88,6 +90,9 @@ void cal::calculateZ(double clear, double single)
         QVector<QPointF> r=calculatePoint_real(type);
         total=modifyNC(vec,vec_,d,type,face,p_Name,r);
 
+        chartDlg ch;
+        ch.drawPlot(vec,vec_,"理论曲线");
+        ch.drawPlot(X_real,Z_real,"实际曲线");
 }
 
 QVector<double> cal::calculateZD(QVector<QPointF> p)
@@ -446,6 +451,8 @@ QVector<QPointF> cal::calculatePoint_real(QString type)
            z_a=position.at(i).y()-z0;
            x_real=a*(vec.at(i)-x_a);
            z_real=a*(vec_.at(i)-z_a);
+           X_real<<x_real;
+           Z_real<<z_real;
            real<<QPointF(x_real,z_real);
 
        }

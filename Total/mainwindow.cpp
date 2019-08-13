@@ -78,7 +78,7 @@ void MainWindow::setString(QString str,QString str1)
 //计算前先判断数据是否存在
 bool MainWindow::tellData()
 {
-    if(R==0||r_m==0||K==0||Lb==0||Xbasic==0||Zbasic==0||Hcenter==0){
+    if(R==0.0||r_m==0.0||K==0.0||Lb==0.0||Xbasic==0.0||Zbasic==0.0||Hcenter==0.0){
         warn="请仔细检查计算参数！不能为0！";
     }
     if(warn=="") return true;
@@ -228,7 +228,7 @@ void MainWindow::on_actioninfoTool_triggered()
 
 void MainWindow::on_actioncalculate_triggered()
 {
-
+  emit showCalTest(cal_info,machine);
 }
 
 void MainWindow::receiveStr(QVector<QString>s)
