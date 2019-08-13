@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>F:/OCX/2016 ICON/Desigan/32px/Design-89.png</file>
+        <file>F:/OCX/2016 ICON/General/32px/General-2-54.png</file>
+        <file>F:/OCX/2016 ICON/General/32px/General-2-69.png</file>
+        <file>F:/OCX/2016 ICON/House/32px/Household-93.png</file>
+        <file>F:/OCX/2016 ICON/Inter/32px/Interface-76.png</file>
+    </qresource>
+</RCC>
