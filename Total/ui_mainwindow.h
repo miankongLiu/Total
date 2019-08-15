@@ -38,8 +38,8 @@ public:
     QAction *actioninfoMacine;
     QAction *actioncalculate;
     QWidget *centralWidget;
-    QGridLayout *gridLayout_3;
-    QVBoxLayout *verticalLayout_3;
+    QGridLayout *gridLayout_4;
+    QVBoxLayout *verticalLayout_5;
     QHBoxLayout *horizontalLayout;
     QVBoxLayout *verticalLayout;
     QGroupBox *groupBox;
@@ -51,6 +51,18 @@ public:
     QLabel *label_6;
     QPushButton *pb_caculate;
     QGroupBox *groupBox_2;
+    QGridLayout *gridLayout_3;
+    QHBoxLayout *horizontalLayout_4;
+    QVBoxLayout *verticalLayout_4;
+    QHBoxLayout *horizontalLayout_2;
+    QLabel *label;
+    QLineEdit *lineEdit_3;
+    QHBoxLayout *horizontalLayout_3;
+    QLabel *label_2;
+    QLineEdit *lineEdit_4;
+    QVBoxLayout *verticalLayout_3;
+    QPushButton *open;
+    QPushButton *open1;
     QVBoxLayout *verticalLayout_2;
     QLineEdit *lineEdit_2;
     QPlainTextEdit *plainTextEdit;
@@ -482,13 +494,13 @@ public:
         actioncalculate->setIcon(icon3);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        gridLayout_3 = new QGridLayout(centralWidget);
-        gridLayout_3->setSpacing(6);
-        gridLayout_3->setContentsMargins(11, 11, 11, 11);
-        gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
-        verticalLayout_3 = new QVBoxLayout();
-        verticalLayout_3->setSpacing(6);
-        verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
+        gridLayout_4 = new QGridLayout(centralWidget);
+        gridLayout_4->setSpacing(6);
+        gridLayout_4->setContentsMargins(11, 11, 11, 11);
+        gridLayout_4->setObjectName(QStringLiteral("gridLayout_4"));
+        verticalLayout_5 = new QVBoxLayout();
+        verticalLayout_5->setSpacing(6);
+        verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(6);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
@@ -549,6 +561,70 @@ public:
         groupBox_2 = new QGroupBox(centralWidget);
         groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
         groupBox_2->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
+        gridLayout_3 = new QGridLayout(groupBox_2);
+        gridLayout_3->setSpacing(6);
+        gridLayout_3->setContentsMargins(11, 11, 11, 11);
+        gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setSpacing(6);
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
+        verticalLayout_4 = new QVBoxLayout();
+        verticalLayout_4->setSpacing(6);
+        verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        label = new QLabel(groupBox_2);
+        label->setObjectName(QStringLiteral("label"));
+
+        horizontalLayout_2->addWidget(label);
+
+        lineEdit_3 = new QLineEdit(groupBox_2);
+        lineEdit_3->setObjectName(QStringLiteral("lineEdit_3"));
+
+        horizontalLayout_2->addWidget(lineEdit_3);
+
+
+        verticalLayout_4->addLayout(horizontalLayout_2);
+
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setSpacing(6);
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
+        label_2 = new QLabel(groupBox_2);
+        label_2->setObjectName(QStringLiteral("label_2"));
+
+        horizontalLayout_3->addWidget(label_2);
+
+        lineEdit_4 = new QLineEdit(groupBox_2);
+        lineEdit_4->setObjectName(QStringLiteral("lineEdit_4"));
+
+        horizontalLayout_3->addWidget(lineEdit_4);
+
+
+        verticalLayout_4->addLayout(horizontalLayout_3);
+
+
+        horizontalLayout_4->addLayout(verticalLayout_4);
+
+        verticalLayout_3 = new QVBoxLayout();
+        verticalLayout_3->setSpacing(6);
+        verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
+        open = new QPushButton(groupBox_2);
+        open->setObjectName(QStringLiteral("open"));
+
+        verticalLayout_3->addWidget(open);
+
+        open1 = new QPushButton(groupBox_2);
+        open1->setObjectName(QStringLiteral("open1"));
+
+        verticalLayout_3->addWidget(open1);
+
+
+        horizontalLayout_4->addLayout(verticalLayout_3);
+
+
+        gridLayout_3->addLayout(horizontalLayout_4, 0, 0, 1, 1);
+
 
         verticalLayout->addWidget(groupBox_2);
 
@@ -574,15 +650,15 @@ public:
         horizontalLayout->setStretch(0, 1);
         horizontalLayout->setStretch(1, 3);
 
-        verticalLayout_3->addLayout(horizontalLayout);
+        verticalLayout_5->addLayout(horizontalLayout);
 
         lineEdit = new QLineEdit(centralWidget);
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
 
-        verticalLayout_3->addWidget(lineEdit);
+        verticalLayout_5->addWidget(lineEdit);
 
 
-        gridLayout_3->addLayout(verticalLayout_3, 0, 0, 1, 1);
+        gridLayout_4->addLayout(verticalLayout_5, 0, 0, 1, 1);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -618,6 +694,10 @@ public:
         label_6->setText(QApplication::translate("MainWindow", "\346\200\273\345\216\273\351\231\244\351\207\217", nullptr));
         pb_caculate->setText(QApplication::translate("MainWindow", "\350\256\241\347\256\227", nullptr));
         groupBox_2->setTitle(QApplication::translate("MainWindow", "...", nullptr));
+        label->setText(QApplication::translate("MainWindow", "\347\220\206\350\256\272", nullptr));
+        label_2->setText(QApplication::translate("MainWindow", "\350\257\257\345\267\256", nullptr));
+        open->setText(QApplication::translate("MainWindow", "\346\211\223\345\274\200", nullptr));
+        open1->setText(QApplication::translate("MainWindow", "\346\211\223\345\274\200", nullptr));
     } // retranslateUi
 
 };

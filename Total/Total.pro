@@ -6,6 +6,7 @@
 
 QT       += core gui
 QT       += charts
+CONFIG       += qaxcontainer
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = Total

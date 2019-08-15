@@ -6,6 +6,9 @@
 #include <qmath.h>
 #include <QList>
 #include <qalgorithms.h>
+#include <QAxObject>
+#include <QFileDialog>
+#include <QMessageBox>
 #pragma execution_character_set("utf-8")
 using namespace std;
 
@@ -24,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actioninfoMacine->setText("机床参数");
     ui->actioninfoTool->setText("图纸参数");
     ui->actioncalculate->setText("检测模块");
+
+
  }
 
 MainWindow::~MainWindow()
@@ -75,6 +80,38 @@ void MainWindow::setString(QString str,QString str1)
 
 }
 
+QVector<QPointF> MainWindow::readExcel(QString s)
+{      QVector<QPointF> p;
+       s.replace("/","\\");
+       QAxObject* excel = new QAxObject(this);
+       excel->setControl("Excel.Application");  // 连接Excel控件
+       excel->dynamicCall("SetVisible (bool Visible)", "false"); // 不显示窗体
+       excel->setProperty("DisplayAlerts", false);
+       // step2: 打开工作簿
+       QAxObject* workbooks = excel->querySubObject("WorkBooks"); // 获取工作簿集合
+       QAxObject* workbook = workbooks->querySubObject("Open(const QString&)", s);
+       // step3: 打开sheet
+       QAxObject* worksheet = workbook->querySubObject("WorkSheets(int)", 1);
+       // step4: 获取行数，列数
+       QAxObject* usedrange = worksheet->querySubObject("UsedRange"); // sheet范围
+
+       QAxObject *rows, *columns;
+       rows = usedrange->querySubObject("Rows");  // 行
+       columns = usedrange->querySubObject("Columns");  // 列
+
+       int intRow = rows->property("Count").toInt(); // 行数
+
+       for(int i=0;i<intRow;i++){
+           QString X = "A" + QString::number(i + 1);
+           QString Z = "B" + QString::number(i + 1);
+           QAxObject* cellX = worksheet->querySubObject("Range(QVariant, QVariant)", X);
+           QAxObject* cellZ = worksheet->querySubObject("Range(QVariant, QVariant)", Z);
+           double x=cellX->dynamicCall("Value2()").toDouble();
+           double z=cellZ->dynamicCall("Value2()").toDouble();
+           p<<QPointF(x,z);
+}
+return p;
+}
 //计算前先判断数据是否存在
 bool MainWindow::tellData()
 {
@@ -261,7 +298,9 @@ void MainWindow::on_pb_caculate_clicked()
 
    cal cl;
    QVector<QString> ts=cl.process(cal_info,machine,st,clear_Total,clear_single);
-   setString(ts[1],ts[0]);
+
+   if(!ts.isEmpty()){
+       setString(ts[1],ts[0]);}
 }
 
 
@@ -327,4 +366,68 @@ void MainWindow::receiveString(QVector<QString> m)
    radius=m[4];
 
   st=m;
+}
+//理论文件
+void MainWindow::on_open_clicked()
+{
+  QFileDialog * dlg= new QFileDialog(this);
+  dlg->setWindowTitle("导入理论文件：");
+  dlg->setAcceptMode(QFileDialog::AcceptOpen);
+  dlg->setDirectory(".");
+  dlg->setFileMode(QFileDialog::AnyFile);
+  dlg->setViewMode(QFileDialog::Detail);
+  dlg->setNameFilter(QString(tr("*.xlxs")));
+
+  QString s;
+  if(dlg->exec()==QFileDialog::Accepted)
+  {
+    s=dlg->selectedFiles()[0];
+    ui->lineEdit_3->setText(s);
+  }
+}
+
+void MainWindow::on_open1_clicked()
+{
+    QFileDialog *dlg= new QFileDialog(this);
+    dlg->setWindowTitle("导入误差数据：");
+    dlg->setAcceptMode(QFileDialog::AcceptOpen);
+    dlg->setFileMode(QFileDialog::AnyFile);
+    dlg->setViewMode(QFileDialog::Detail);
+    dlg->setDirectory(".");
+    dlg->setNameFilter(tr("*xlxs"));
+    QString s;
+    if(dlg->exec()==QFileDialog::Accepted)
+    {
+      s=dlg->selectedFiles()[0];
+      ui->lineEdit_4->setText(s);
+    }
+}
+//补偿
+void MainWindow::on_pb_compensation_clicked()
+{
+    if(ui->lineEdit_3->text()==""||ui->lineEdit_4->text()==""){
+        QMessageBox::warning(this,"警告","检查路径是否为空！");
+    }else{
+        QString s1,s2;
+        s1=ui->lineEdit_3->text();
+        s2=ui->lineEdit_4->text();
+
+        QVector<QPointF> r1=readExcel(s1);
+        QVector<QPointF> r2=readExcel(s2);
+
+        for(int i=0;i<r1.size();i++){
+            double t,t1,t2,temp;
+            t=r1.at(i).x();//x
+            t1=r1.at(i).y();//z
+            //t2=vec2.at(i);//z补偿
+            t2=0;
+            temp=t1+t2;
+            b<<temp;
+            QPointF ex(t,temp);
+            p1<<ex;//理论面形
+
+        }
+
+    }
+
 }

@@ -250,6 +250,7 @@ Makefile: Total.pro D:\Qt\Qt5.10.0\5.10.0\msvc2015\mkspecs\win32-msvc\qmake.conf
 		D:\Qt\Qt5.10.0\5.10.0\msvc2015\mkspecs\features\moc.prf \
 		D:\Qt\Qt5.10.0\5.10.0\msvc2015\mkspecs\features\win32\opengl.prf \
 		D:\Qt\Qt5.10.0\5.10.0\msvc2015\mkspecs\features\uic.prf \
+		D:\Qt\Qt5.10.0\5.10.0\msvc2015\mkspecs\features\win32\dumpcpp.prf \
 		D:\Qt\Qt5.10.0\5.10.0\msvc2015\mkspecs\features\qmake_use.prf \
 		D:\Qt\Qt5.10.0\5.10.0\msvc2015\mkspecs\features\file_copies.prf \
 		D:\Qt\Qt5.10.0\5.10.0\msvc2015\mkspecs\features\win32\windows.prf \
@@ -260,6 +261,8 @@ Makefile: Total.pro D:\Qt\Qt5.10.0\5.10.0\msvc2015\mkspecs\win32-msvc\qmake.conf
 		Total.pro \
 		D:\Qt\Qt5.10.0\5.10.0\msvc2015\lib\qtmaind.prl \
 		D:\Qt\Qt5.10.0\5.10.0\msvc2015\lib\Qt5Charts.prl \
+		D:\Qt\Qt5.10.0\5.10.0\msvc2015\lib\Qt5AxContainer.prl \
+		D:\Qt\Qt5.10.0\5.10.0\msvc2015\lib\Qt5AxBase.prl \
 		D:\Qt\Qt5.10.0\5.10.0\msvc2015\lib\Qt5Widgets.prl \
 		D:\Qt\Qt5.10.0\5.10.0\msvc2015\lib\Qt5Gui.prl \
 		D:\Qt\Qt5.10.0\5.10.0\msvc2015\lib\Qt5Core.prl
@@ -439,6 +442,7 @@ D:\Qt\Qt5.10.0\5.10.0\msvc2015\mkspecs\features\resources.prf:
 D:\Qt\Qt5.10.0\5.10.0\msvc2015\mkspecs\features\moc.prf:
 D:\Qt\Qt5.10.0\5.10.0\msvc2015\mkspecs\features\win32\opengl.prf:
 D:\Qt\Qt5.10.0\5.10.0\msvc2015\mkspecs\features\uic.prf:
+D:\Qt\Qt5.10.0\5.10.0\msvc2015\mkspecs\features\win32\dumpcpp.prf:
 D:\Qt\Qt5.10.0\5.10.0\msvc2015\mkspecs\features\qmake_use.prf:
 D:\Qt\Qt5.10.0\5.10.0\msvc2015\mkspecs\features\file_copies.prf:
 D:\Qt\Qt5.10.0\5.10.0\msvc2015\mkspecs\features\win32\windows.prf:
@@ -449,6 +453,8 @@ D:\Qt\Qt5.10.0\5.10.0\msvc2015\mkspecs\features\lex.prf:
 Total.pro:
 D:\Qt\Qt5.10.0\5.10.0\msvc2015\lib\qtmaind.prl:
 D:\Qt\Qt5.10.0\5.10.0\msvc2015\lib\Qt5Charts.prl:
+D:\Qt\Qt5.10.0\5.10.0\msvc2015\lib\Qt5AxContainer.prl:
+D:\Qt\Qt5.10.0\5.10.0\msvc2015\lib\Qt5AxBase.prl:
 D:\Qt\Qt5.10.0\5.10.0\msvc2015\lib\Qt5Widgets.prl:
 D:\Qt\Qt5.10.0\5.10.0\msvc2015\lib\Qt5Gui.prl:
 D:\Qt\Qt5.10.0\5.10.0\msvc2015\lib\Qt5Core.prl:

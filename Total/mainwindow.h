@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 #include <QMainWindow>
 #include <QVector>
+
 #include "calculate.h"
 #include "info.h"
 #include "infotool.h"
@@ -29,7 +30,7 @@ public:
     void test();
     void test11(QVector<double> a,QVector<QString> b);
     void setString(QString str,QString str1);
-
+    QVector<QPointF> readExcel(QString s);
 
 
 private:
@@ -59,6 +60,9 @@ private slots:
 
 
 
+     void on_open_clicked();
+     void on_open1_clicked();
+     void on_pb_compensation_clicked();
 };
 
 #endif // MAINWINDOW_H

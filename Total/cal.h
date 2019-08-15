@@ -6,7 +6,7 @@ class cal
 {
 public:
     cal();
-    void calculateZ(double clear,double single);
+    QString calculateZ(double clear,double single);
      QVector<double> calculateZD(QVector<QPointF> p);
     void calculateCA(QVector<QPointF> p1);
     QVector<double> calculateAngle();
@@ -37,6 +37,9 @@ private:
     double clearT;
     QString type,face,radius,single,p_Name;
 
+    QString tellAngle(QVector<double> a);
+
+    void createExcel(QVector<QPointF> p,QString name);
 
 };
 

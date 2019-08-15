@@ -8,20 +8,25 @@
 #include <QTextStream>
 #include <QFile>
 #include <QDebug>
-
+#include <QAxObject>
+#include <QMessageBox>
+#include <qalgorithms.h>
+#include <qmath.h>
 #pragma execution_character_set("utf-8")
 cal::cal()
 {
    dir_str="D:/comTest";
 }
 
-void cal::calculateZ(double clear, double single)
+QString cal::calculateZ(double clear, double single)
 {
     vec.clear();
     vec_.clear();
     C_.clear();
     A_.clear();
     Z_1.clear();
+    B_1.clear();
+    B_2.clear();
     X_real.clear();
     Z_real.clear();
     p1.clear();
@@ -58,7 +63,7 @@ void cal::calculateZ(double clear, double single)
                  t=vec.at(i);
                  t=abs(t);//无论大于0或者小于0，z值关于y轴对称
                  //将t>=0修改为t>=-r_m/2
-                if(t>=-r_m/2&&t<r_m/2){
+                if(abs(t)>=0){
 
                  temp=(qPow(t,2))/(R_*(1+qSqrt(1-(1+K_)*qPow(t/R_,2))))+C1_+C2_*qPow(t,2)+C3_*qPow(t,4)+C4_*qPow(t,6)+C5_*qPow(t,8)+C6_*qPow(t,10)+C7_*qPow(t,12)+C8_*qPow(t,14)+C9_*qPow(t,16)+C10_*qPow(t,18)+C11_*qPow(t,20)+C12_*qPow(t,22);
 
@@ -81,18 +86,35 @@ void cal::calculateZ(double clear, double single)
             QPointF ex;
             ex.setX(t);
             ex.setY(t1);
+
             p1.push_back(ex);//存储理论点集
         }
         Z_1=calculateZD(p1);
         B_2=calculateAngle();
-        QVector<double> d=calculateClear(clear,single);
-        calculateInsert(vec,vec_,radius,face,type);
-        QVector<QPointF> r=calculatePoint_real(type);
-        total=modifyNC(vec,vec_,d,type,face,p_Name,r);
 
-        chartDlg ch;
-        ch.drawPlot(vec,vec_,"理论曲线");
-        ch.drawPlot(X_real,Z_real,"实际曲线");
+        QString s=tellAngle(B_1);
+
+        if(s=="符合"){
+            QVector<double> d=calculateClear(clear,single);
+            calculateInsert(vec,vec_,radius,face,type);
+            QVector<QPointF> r=calculatePoint_real(type);
+            total=modifyNC(vec,vec_,d,type,face,p_Name,r);
+
+            chartDlg ch;
+            ch.drawPlot(vec,vec_,"理论曲线");
+            ch.drawPlot(X_real,Z_real,"实际曲线");
+            createExcel(p1,"理论");
+        }else{
+            MainWindow m;
+
+            QMessageBox::warning(&m,"警告","请检查偏置角参数是否错误，夹角超过90度,建议偏置角不超过"+s+"度！",QMessageBox::Yes);
+
+        }
+
+
+    return s;
+
+
 }
 
 QVector<double> cal::calculateZD(QVector<QPointF> p)
@@ -121,6 +143,8 @@ QVector<double> cal::calculateZD(QVector<QPointF> p)
           }
 
        }
+       qDebug()<<"Angle"<<p.size();
+       qDebug()<<"导数"<<z1.size();
        return z1;
 }
 
@@ -155,6 +179,7 @@ QVector<double> cal::calculateAngle()
             //代码中显示的角度
             //angle_real<<a_real;//角度
             b<<a_real/57.3;//弧度
+            B_1<<a_real;
         }
         return b;
 }
@@ -286,10 +311,10 @@ QVector<QString> cal::modifyNC(QVector<double> v, QVector<double> v1, QVector<do
 
                z_safe=-(10+H);
            }
-
+           qDebug()<<"safe"<<z_safe;
            QDateTime datetime;
            QString NC;
-           QString timestr=datetime.currentDateTime().toString("yyyyMMddHHmmss");
+           QString timestr=datetime.currentDateTime().toString("yyyy-MM-dd-HH-mm-ss");
            NC = dir_str+ "/"+timestr+p_Name+".nc";//假设指定文件夹路径为D盘根目录
            NC.replace("/","\\");
 
@@ -455,7 +480,10 @@ QVector<QPointF> cal::calculatePoint_real(QString type)
            Z_real<<z_real;
            real<<QPointF(x_real,z_real);
 
+
        }
+       createExcel(real,"实际");
+
        return real;
 }
 
@@ -467,7 +495,7 @@ QVector<double> cal::calculateClear(double clear, double single)
           QVector<double>res;//存取结果，依次是总去除量、单去除、去除次数、余量
 
 
-          if(single>=(-1e-6)&&single<=(1e-6)){
+          if(single!=0.0){
             if(fmod(clear,single)==0){
                num_clear=clear/single;
                surplus=0;
@@ -522,8 +550,99 @@ QVector<QString> cal::process(QVector<double> &d, QVector<double> &m, QVector<QS
         Ybasic=m.at(8);
 
 
-       calculateZ(clear,single);
+       QString s=calculateZ(clear,single);
+       if(s!="符合"){
+           QVector<QString> r;
+          return r;
+       }else{
+          return total;
+       }
 
-       return total;
 
+}
+
+QString cal::tellAngle(QVector<double> a)
+{
+
+        qSort(a.begin(),a.end());
+        double max;
+
+        max=a.at(a.size()-1);
+        qDebug()<<"最大角度"<<max;
+        QString tellA;
+        QString b;
+        if(max+angle>90){
+            double a =90-max;
+            b=QString::number(a,10,5);
+            //QMessageBox::warning(this,"警告","请检查偏置角参数是否错误，夹角超过90度,建议偏置角不超过"+b+"度！",QMessageBox::Yes);
+            tellA="不符合";
+            qDebug()<<tellA;
+        }else if(max+angle<=90){
+            tellA="符合";
+            qDebug()<<tellA;
+            b="符合";
+        }
+
+
+
+       return b;
+
+}
+//生成excel文件
+void cal::createExcel(QVector<QPointF> p, QString name)
+{
+    QDateTime dateTime;
+    QString fileName;
+    QString timestr=dateTime.currentDateTime().toString("yyyy-mm-dd-HH-mm");
+    fileName=dir_str+"/"+timestr+name+".xlsx";
+    fileName.replace("/","\\");
+    QAxObject *pApplication=new QAxObject();
+    QAxObject* pWorkBooks;
+    QAxObject* pWorkBook;
+    QAxObject* pSheets;
+    QAxObject* pSheet;
+    QAxObject* cellA,*cellB;
+    QString A,B;
+    pApplication->setControl("Excel.Application");
+    pApplication->dynamicCall("SetVisible(bool)",true);
+    pWorkBooks=pApplication->querySubObject("Workbooks");
+    QFile file(fileName);
+    if(file.exists()){
+        pWorkBook=pWorkBooks->querySubObject("Open(const QString &)",fileName);
+
+    }else{
+        pWorkBooks->dynamicCall("Add");//加载了sheet
+        pWorkBook=pApplication->querySubObject("ActiveWorkBook");
+        pWorkBook->dynamicCall("SaveAs(const QString&)",fileName);
+    }
+    pSheets=pWorkBook->querySubObject("Sheets");
+    pSheet=pSheets->querySubObject("Item(int)",1);
+
+    int row=1;
+    for(int i=0;i<p.size();i++){
+        double t,t1;
+        t=p[i].x();
+        t1=p[i].y();
+
+        A="A"+QString::number(row,10);
+        B="B"+QString::number(row,10);
+
+        cellA=pSheet->querySubObject("Range(QString)",A);
+        cellB=pSheet->querySubObject("Range(QString)",B);
+
+        QString s,s1;
+        s=QString::number(t,'f',7);
+        s1=QString::number(t1,'f',7);
+
+        cellA->dynamicCall("SetValue(const QVatiant&)",s);
+        cellB->dynamicCall("SetValue(const QVatiant&)",s1);
+        row++;
+    }
+
+    if (pApplication != nullptr)
+              {   pWorkBooks->dynamicCall("Close(Boolean)",false);
+                  pApplication->dynamicCall("Quit()");
+                  delete pApplication;
+                  pApplication = nullptr;
+              }
 }
