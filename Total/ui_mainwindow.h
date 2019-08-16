@@ -63,6 +63,7 @@ public:
     QVBoxLayout *verticalLayout_3;
     QPushButton *open;
     QPushButton *open1;
+    QPushButton *pb_compensation;
     QVBoxLayout *verticalLayout_2;
     QLineEdit *lineEdit_2;
     QPlainTextEdit *plainTextEdit;
@@ -625,6 +626,11 @@ public:
 
         gridLayout_3->addLayout(horizontalLayout_4, 0, 0, 1, 1);
 
+        pb_compensation = new QPushButton(groupBox_2);
+        pb_compensation->setObjectName(QStringLiteral("pb_compensation"));
+
+        gridLayout_3->addWidget(pb_compensation, 1, 0, 1, 1);
+
 
         verticalLayout->addWidget(groupBox_2);
 
@@ -698,6 +704,7 @@ public:
         label_2->setText(QApplication::translate("MainWindow", "\350\257\257\345\267\256", nullptr));
         open->setText(QApplication::translate("MainWindow", "\346\211\223\345\274\200", nullptr));
         open1->setText(QApplication::translate("MainWindow", "\346\211\223\345\274\200", nullptr));
+        pb_compensation->setText(QApplication::translate("MainWindow", "\350\241\245\345\201\277", nullptr));
     } // retranslateUi
 
 };

@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "cal.h"
 #include "info.h"
+#include "chartdlg.h"
 #include <QDebug>
 #include <qmath.h>
 #include <QList>
@@ -80,8 +81,8 @@ void MainWindow::setString(QString str,QString str1)
 
 }
 
-QVector<QPointF> MainWindow::readExcel(QString s)
-{      QVector<QPointF> p;
+QVector<QVector<double>> MainWindow::readExcel(QString s)
+{      QVector<QVector<double>> p;
        s.replace("/","\\");
        QAxObject* excel = new QAxObject(this);
        excel->setControl("Excel.Application");  // 连接Excel控件
@@ -108,7 +109,9 @@ QVector<QPointF> MainWindow::readExcel(QString s)
            QAxObject* cellZ = worksheet->querySubObject("Range(QVariant, QVariant)", Z);
            double x=cellX->dynamicCall("Value2()").toDouble();
            double z=cellZ->dynamicCall("Value2()").toDouble();
-           p<<QPointF(x,z);
+           //p<<QPointF(x,z);
+           p[0]<<x;
+           p[1]<<z;
 }
 return p;
 }
@@ -337,7 +340,7 @@ void MainWindow::receiveData(QVector<double> d,QVector<QString> m)
     face=st[2];
     type=st[3];
     radius=st[4];
-   calClear();
+    calClear();
 
 }
 //接收机床参数
@@ -361,8 +364,10 @@ void MainWindow::receiveString(QVector<QString> m)
 {
    p_Name=m[0];
    step=m[1].toDouble();
-   face=m[2];
-   type=m[3];
+   //face=m[2];
+   //type=m[3];
+   type=m[2];
+   face=m[3];
    radius=m[4];
 
   st=m;
@@ -412,21 +417,20 @@ void MainWindow::on_pb_compensation_clicked()
         s1=ui->lineEdit_3->text();
         s2=ui->lineEdit_4->text();
 
-        QVector<QPointF> r1=readExcel(s1);
-        QVector<QPointF> r2=readExcel(s2);
+        QVector<QVector<double>> r1=readExcel(s1);
+        QVector<QVector<double>> r2=readExcel(s2);
 
-        for(int i=0;i<r1.size();i++){
-            double t,t1,t2,temp;
-            t=r1.at(i).x();//x
-            t1=r1.at(i).y();//z
-            //t2=vec2.at(i);//z补偿
-            t2=0;
-            temp=t1+t2;
-            b<<temp;
-            QPointF ex(t,temp);
-            p1<<ex;//理论面形
-
+        /*cal *cl=new cal;
+        QVector<double> d=cl->calculateClear(clear_Total,clear_single);
+        cl->calculateInsert(r1[0],r1[1],radius,face,type);
+        QVector<QPointF> r=cl->calculatePoint_real(type);
+        QVector<double> a;
+        for(int i=0;i<r.size();i++){
+            double temp=r[i].y()+r2[1][i];
+            a<<temp;
         }
+       QVector<QString> total=cl->modifyNC(r1[0],a,d,type,face,p_Name,r);*/
+
 
     }
 

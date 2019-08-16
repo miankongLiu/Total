@@ -52,10 +52,21 @@ QString cal::calculateZ(double clear, double single)
             }
             vec<<r_m/2;//存取X点
             int size=vec.size();
-            for(int i=1;i>size-1;i++){
-                double temp=vec.at(i);
+            QVector<double> t;
+
+            /*for(int i=1;i<size;i++){
+                double temp=t.at(i);
                 vec<<-temp;
-            }
+            }*/
+            for(int i=size-1;i>1;i--){
+                   double temp=vec.at(i);
+                    t<<-temp;
+                        }
+            for(int i=0;i<size;i++){
+                   double temp=vec.at(i);
+                    t<<temp;
+                        }
+            vec=t;
         }
 
             for (int i=0;i<vec.size();i++){
@@ -63,7 +74,7 @@ QString cal::calculateZ(double clear, double single)
                  t=vec.at(i);
                  t=abs(t);//无论大于0或者小于0，z值关于y轴对称
                  //将t>=0修改为t>=-r_m/2
-                if(abs(t)>=0){
+                if(abs(t)<r_m/2){
 
                  temp=(qPow(t,2))/(R_*(1+qSqrt(1-(1+K_)*qPow(t/R_,2))))+C1_+C2_*qPow(t,2)+C3_*qPow(t,4)+C4_*qPow(t,6)+C5_*qPow(t,8)+C6_*qPow(t,10)+C7_*qPow(t,12)+C8_*qPow(t,14)+C9_*qPow(t,16)+C10_*qPow(t,18)+C11_*qPow(t,20)+C12_*qPow(t,22);
 
@@ -361,7 +372,7 @@ QVector<QString> cal::modifyNC(QVector<double> v, QVector<double> v1, QVector<do
                int m=0;
                int j=1;
 
-               for(int i=p.size()-1;i>=0;i--){
+               for(int i=p_.size()-1;i>=0;i--){
                    m=130+j*5;
                    //in<<"N"<<m<<" X"<<p_.at(i).x()<<"  Z"<<p_.at(i).y()+clear_single<<"  B"<<angle_real.at(i)<<"\n";
                    in<<"N"<<m<<" X"<<p_.at(i).x()<<"  Z"<<p_.at(i).y()-a*clear_single<<"  B"<<B_2.at(i)*57.3<<"\n";

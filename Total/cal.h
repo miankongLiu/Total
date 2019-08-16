@@ -6,9 +6,9 @@ class cal
 {
 public:
     cal();
-    QString calculateZ(double clear,double single);
+     QString calculateZ(double clear,double single);
      QVector<double> calculateZD(QVector<QPointF> p);
-    void calculateCA(QVector<QPointF> p1);
+     void calculateCA(QVector<QPointF> p1);
     QVector<double> calculateAngle();
     void calculateInsert(QVector<double> v,QVector<double> v1,QString radius,QString face,QString machine);
     //生成NC代码

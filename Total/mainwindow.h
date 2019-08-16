@@ -30,7 +30,7 @@ public:
     void test();
     void test11(QVector<double> a,QVector<QString> b);
     void setString(QString str,QString str1);
-    QVector<QPointF> readExcel(QString s);
+    QVector<QVector<double>> readExcel(QString s);
 
 
 private:
