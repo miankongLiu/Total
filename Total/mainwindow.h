@@ -26,11 +26,12 @@ public:
     QVector<QString> st;//存字符串
     QVector<double> machine,cal_info;
     QVector<QString> test1;
+    QString dir_str;
     int t;
     void test();
     void test11(QVector<double> a,QVector<QString> b);
     void setString(QString str,QString str1);
-    QVector<QVector<double>> readExcel(QString s);
+    QVector<QPointF> readExcel(QString s);
 
 
 private:
@@ -43,7 +44,7 @@ signals:
     void sendString(QVector<QString> m);
     void showInfo();
     void showInfoT();
-    void showCalTest(QVector<double> d,QVector<double> m);
+    void showCalTest(QVector<double> d,QVector<double> m,QVector<QString> st);
 
 
 private slots:
@@ -63,6 +64,11 @@ private slots:
      void on_open_clicked();
      void on_open1_clicked();
      void on_pb_compensation_clicked();
+     void on_actionTransfer_triggered();
+     void on_actionPlus_triggered();
+     void on_pb_edit_clicked();
+     void on_pb_save_clicked();
+     void on_actionFile_triggered();
 };
 
 #endif // MAINWINDOW_H

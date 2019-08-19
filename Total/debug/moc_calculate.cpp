@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_calculate_t {
-    QByteArrayData data[8];
-    char stringdata0[84];
+    QByteArrayData data[10];
+    char stringdata0[104];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -38,12 +38,15 @@ QT_MOC_LITERAL(2, 24, 0), // ""
 QT_MOC_LITERAL(3, 25, 15), // "QVector<double>"
 QT_MOC_LITERAL(4, 41, 1), // "d"
 QT_MOC_LITERAL(5, 43, 1), // "m"
-QT_MOC_LITERAL(6, 45, 17), // "on_pb_Yes_clicked"
-QT_MOC_LITERAL(7, 63, 20) // "on_pb_Cancel_clicked"
+QT_MOC_LITERAL(6, 45, 16), // "QVector<QString>"
+QT_MOC_LITERAL(7, 62, 2), // "st"
+QT_MOC_LITERAL(8, 65, 17), // "on_pb_Yes_clicked"
+QT_MOC_LITERAL(9, 83, 20) // "on_pb_Cancel_clicked"
 
     },
     "calculate\0displatAndPro\0\0QVector<double>\0"
-    "d\0m\0on_pb_Yes_clicked\0on_pb_Cancel_clicked"
+    "d\0m\0QVector<QString>\0st\0on_pb_Yes_clicked\0"
+    "on_pb_Cancel_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -61,12 +64,12 @@ static const uint qt_meta_data_calculate[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    2,   29,    2, 0x08 /* Private */,
-       6,    0,   34,    2, 0x08 /* Private */,
-       7,    0,   35,    2, 0x08 /* Private */,
+       1,    3,   29,    2, 0x08 /* Private */,
+       8,    0,   36,    2, 0x08 /* Private */,
+       9,    0,   37,    2, 0x08 /* Private */,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 3,    4,    5,
+    QMetaType::Void, 0x80000000 | 3, 0x80000000 | 3, 0x80000000 | 6,    4,    5,    7,
     QMetaType::Void,
     QMetaType::Void,
 
@@ -79,7 +82,7 @@ void calculate::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         calculate *_t = static_cast<calculate *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->displatAndPro((*reinterpret_cast< QVector<double>(*)>(_a[1])),(*reinterpret_cast< QVector<double>(*)>(_a[2]))); break;
+        case 0: _t->displatAndPro((*reinterpret_cast< QVector<double>(*)>(_a[1])),(*reinterpret_cast< QVector<double>(*)>(_a[2])),(*reinterpret_cast< QVector<QString>(*)>(_a[3]))); break;
         case 1: _t->on_pb_Yes_clicked(); break;
         case 2: _t->on_pb_Cancel_clicked(); break;
         default: ;
@@ -90,6 +93,8 @@ void calculate::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 0:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<int*>(_a[0]) = -1; break;
+            case 2:
+                *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QVector<QString> >(); break;
             case 1:
             case 0:
                 *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QVector<double> >(); break;

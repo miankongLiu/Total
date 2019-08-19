@@ -10,6 +10,7 @@
 #include <QAxObject>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QDateTime>
 #pragma execution_character_set("utf-8")
 using namespace std;
 
@@ -23,12 +24,8 @@ MainWindow::MainWindow(QWidget *parent) :
     clear_single=0;
 
 
-
-    ui->actionhome->setText("主页");
-    ui->actioninfoMacine->setText("机床参数");
-    ui->actioninfoTool->setText("图纸参数");
-    ui->actioncalculate->setText("检测模块");
-
+    dir_str="D:/comTest";
+    ui->mainToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
  }
 
@@ -78,11 +75,11 @@ void MainWindow::setString(QString str,QString str1)
 {
     ui->lineEdit_2->setText(str);
     ui->plainTextEdit->setPlainText(str1);
-
+    ui->plainTextEdit->setEnabled(false);
 }
 
-QVector<QVector<double>> MainWindow::readExcel(QString s)
-{      QVector<QVector<double>> p;
+QVector<QPointF> MainWindow::readExcel(QString s)
+{      QVector<QPointF> p;
        s.replace("/","\\");
        QAxObject* excel = new QAxObject(this);
        excel->setControl("Excel.Application");  // 连接Excel控件
@@ -109,17 +106,26 @@ QVector<QVector<double>> MainWindow::readExcel(QString s)
            QAxObject* cellZ = worksheet->querySubObject("Range(QVariant, QVariant)", Z);
            double x=cellX->dynamicCall("Value2()").toDouble();
            double z=cellZ->dynamicCall("Value2()").toDouble();
-           //p<<QPointF(x,z);
-           p[0]<<x;
-           p[1]<<z;
+           p<<QPointF(x,z);
+
 }
 return p;
 }
 //计算前先判断数据是否存在
 bool MainWindow::tellData()
-{
-    if(R==0.0||r_m==0.0||K==0.0||Lb==0.0||Xbasic==0.0||Zbasic==0.0||Hcenter==0.0){
+{   warn="";
+    clear_single=ui->edit_sigle->text().toDouble();
+    clear_Total=ui->edit_total->text().toDouble();
+    if(R==0.0||r_m==0.0||K==0.0||Lb==0.0){
         warn="请仔细检查计算参数！不能为0！";
+    }
+    if(clear_single==0.0){
+        warn+="\n";
+        warn+="单次去除量不能为0！";
+    }
+    if(clear_Total==0.0){
+        warn+="\n";
+        warn+="总去除量不能为0！";
     }
     if(warn=="") return true;
     return false;
@@ -255,7 +261,8 @@ void MainWindow::receiveMachine(QVector<double> m)
 void MainWindow::on_actioninfoMacine_triggered()
 {
 
-   emit showInfo();
+    emit showInfo();
+
 
 }
 //砂轮
@@ -268,7 +275,7 @@ void MainWindow::on_actioninfoTool_triggered()
 
 void MainWindow::on_actioncalculate_triggered()
 {
-  emit showCalTest(cal_info,machine);
+  emit showCalTest(cal_info,machine,st);
 }
 
 void MainWindow::receiveStr(QVector<QString>s)
@@ -280,7 +287,7 @@ void MainWindow::receiveStr(QVector<QString>s)
        s1+=res[i];
        s1+="  ";
     }
-    ui->lineEdit->setText(s1);
+    //ui->lineEdit->setText(s1);
 
 }
 
@@ -295,15 +302,19 @@ void MainWindow::receiveClear(double a)
 void MainWindow::on_pb_caculate_clicked()
 {
 
-   clear_single=ui->edit_sigle->text().toDouble();
-   clear_Total=ui->edit_total->text().toDouble();
+   //clear_single=ui->edit_sigle->text().toDouble();
+   //clear_Total=ui->edit_total->text().toDouble();
 
+    if(tellData()==true){
+        cal cl;
+        QVector<QString> ts=cl.process(cal_info,machine,st,clear_Total,clear_single);
 
-   cal cl;
-   QVector<QString> ts=cl.process(cal_info,machine,st,clear_Total,clear_single);
+        if(!ts.isEmpty()){
+            setString(ts[1],ts[0]);}
+    }else{
+        QMessageBox::warning(this,"警告",warn,QMessageBox::Yes);
+    }
 
-   if(!ts.isEmpty()){
-       setString(ts[1],ts[0]);}
 }
 
 
@@ -381,7 +392,7 @@ void MainWindow::on_open_clicked()
   dlg->setDirectory(".");
   dlg->setFileMode(QFileDialog::AnyFile);
   dlg->setViewMode(QFileDialog::Detail);
-  dlg->setNameFilter(QString(tr("*.xlxs")));
+  dlg->setNameFilter(QString(tr("*.xlsx *.xls")));
 
   QString s;
   if(dlg->exec()==QFileDialog::Accepted)
@@ -399,7 +410,7 @@ void MainWindow::on_open1_clicked()
     dlg->setFileMode(QFileDialog::AnyFile);
     dlg->setViewMode(QFileDialog::Detail);
     dlg->setDirectory(".");
-    dlg->setNameFilter(tr("*xlxs"));
+    dlg->setNameFilter(QString(tr("*.xlsx *.xls")));
     QString s;
     if(dlg->exec()==QFileDialog::Accepted)
     {
@@ -417,21 +428,242 @@ void MainWindow::on_pb_compensation_clicked()
         s1=ui->lineEdit_3->text();
         s2=ui->lineEdit_4->text();
 
-        QVector<QVector<double>> r1=readExcel(s1);
-        QVector<QVector<double>> r2=readExcel(s2);
-
-        /*cal *cl=new cal;
-        QVector<double> d=cl->calculateClear(clear_Total,clear_single);
-        cl->calculateInsert(r1[0],r1[1],radius,face,type);
-        QVector<QPointF> r=cl->calculatePoint_real(type);
-        QVector<double> a;
-        for(int i=0;i<r.size();i++){
-            double temp=r[i].y()+r2[1][i];
-            a<<temp;
+        QVector<QPointF> r1=readExcel(s1);
+        QVector<QPointF> r2=readExcel(s2);
+        if(s1==nullptr||s2==nullptr){
+            QMessageBox::warning(this,"警告","选择路径不能为空！",QMessageBox::Yes);
+            return;
         }
-       QVector<QString> total=cl->modifyNC(r1[0],a,d,type,face,p_Name,r);*/
 
+
+        if(tellData()==true){
+            cal cl;
+         QVector<QString> total=cl.processCom(r1,r2,cal_info,machine,st,clear_Total,clear_single);
+
+         if(!total.isEmpty()){
+             setString(total[1],total[0]);}
+        }else{
+            QMessageBox::warning(this,"警告",warn,QMessageBox::Yes);
+        }
 
     }
+
+}
+//txt转excel
+void MainWindow::on_actionTransfer_triggered()
+{
+    QVector<double>x_Test;
+        QFileDialog *dlg=new QFileDialog(this);
+        dlg->setWindowTitle("导入检测文件：");
+        dlg->setAcceptMode(QFileDialog::AcceptOpen);
+        dlg->setDirectory(".");
+        dlg->setFileMode(QFileDialog::AnyFile);
+        dlg->setViewMode(QFileDialog::Detail);
+        dlg->setNameFilter(QString(tr("*.txt")));
+        QString root;
+        if(dlg->exec()==QFileDialog::Accepted)
+        {
+            root=dlg->selectedFiles()[0];
+        }
+        root.replace("/","\\");
+
+
+
+        //存储x与误差值
+        QVector<double> V1,V2;
+
+
+        if(root!=nullptr){
+            QFile file(root);
+                if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+                {
+                    while (!file.atEnd())
+                    {
+                        QByteArray line = file.readLine();
+                        QString str(line);
+
+                        //把中间多余的空格转换为一个空格
+                        str=str.simplified();
+                        QStringList lst;
+                        lst=str.split(" ");
+                        QString a = lst[0];
+                        QString b = lst[1];
+
+
+
+
+                        b=b.left(b.length()-1);//去除\n
+                        double b1;
+                        b1=b.toDouble()/1000;
+                        V1<<a.toDouble();
+                        V2<<b1;
+
+
+
+
+
+
+                    }
+                    file.close();
+
+                }
+
+
+            QDateTime datetime;
+            QString  fileName;
+            QString timestr=datetime.currentDateTime().toString("yyyy-MM-dd-HH-mm-ss");
+            fileName = dir_str+ "/"+timestr +"误差"+".xlsx";//假设指定文件夹路径为D盘根目录
+            fileName.replace("/","\\");
+
+
+            QAxObject *pApplication=new QAxObject();
+            QAxObject* pWorkBooks;
+            QAxObject* pWorkBook;
+            QAxObject* pSheets;
+            QAxObject* pSheet;
+            QAxObject* cellA,*cellB;
+            QString A,B;
+             pApplication->setControl("Excel.Application");//连接Excel控件
+             pApplication->dynamicCall("SetVisible(bool)",true);//false显示窗体,启动excel，但是却没有sheet页面
+             pWorkBooks=pApplication->querySubObject("Workbooks");
+             QFile file_(fileName);
+             if(file_.exists())
+                 {
+                    pWorkBook=pWorkBooks->querySubObject("Open(const QString &)",fileName);
+
+                 }
+                else
+                 {
+                pWorkBooks->dynamicCall("Add");//加载了sheet
+                pWorkBook=pApplication->querySubObject("ActiveWorkBook");
+                pWorkBook->dynamicCall("SaveAs(const QString&)",fileName);//文件另存为
+                 }
+
+                pSheets=pWorkBook->querySubObject("Sheets");
+                pSheet=pSheets->querySubObject("Item(int)",1);
+
+
+
+              int row=1;
+             for(int N=0;N<V1.size();N++){
+                   double t,t1;
+                   t=V1.at(N);
+                   t1=V2.at(N);
+
+
+                   A="A"+QString::number(row,10);
+                   B="B"+QString::number(row,10);
+
+                   cellA= pSheet->querySubObject("Range(QString)", A);
+                   cellB= pSheet->querySubObject("Range(QString)", B);
+                   QString s,s1;
+
+                   s=QString::number(t,'f',20);
+                   s1=QString::number(t1,'f',20);
+
+                   cellA->dynamicCall("SetValue(conts QVariant&)", s);
+                   cellB->dynamicCall("SetValue(conts QVariant&)", s1);
+                   row++;
+
+
+              }
+             if (pApplication != nullptr)
+                 {   pWorkBooks->dynamicCall("Close(Boolean)",false);
+                     pApplication->dynamicCall("Quit()");
+                     delete pApplication;
+                     pApplication = nullptr;
+                 }
+            QMessageBox::information(this,"提示","转换成功！",QMessageBox::Yes);
+        }else{
+            QMessageBox::warning(this,"警告","输入文件不能为空！",QMessageBox::Yes);
+        }
+}
+//误差累加处理
+void MainWindow::on_actionPlus_triggered()
+{
+       QString s_,s__;
+       QFileDialog *dlg=new QFileDialog(this);
+       dlg->setWindowTitle("导入文件对话框A：");
+       dlg->setAcceptMode(QFileDialog::AcceptOpen);
+       dlg->setDirectory(".");
+       dlg->setFileMode(QFileDialog::AnyFile);
+       dlg->setViewMode(QFileDialog::Detail);
+       dlg->setNameFilter(QString(tr("*.xlsx *.xls")));
+
+       if(dlg->exec()==QFileDialog::Accepted)
+       {
+           s_=dlg->selectedFiles()[0];
+
+       }
+
+
+       QFileDialog *dlg1=new QFileDialog(this);
+       dlg1->setWindowTitle("导入文件对话框B：");
+       dlg1->setAcceptMode(QFileDialog::AcceptOpen);
+       dlg1->setDirectory(".");
+       dlg1->setFileMode(QFileDialog::AnyFile);
+       dlg1->setViewMode(QFileDialog::Detail);
+       dlg1->setNameFilter(QString(tr("*.xlsx *.xls")));
+
+       if(dlg1->exec()==QFileDialog::Accepted)
+       {
+           s__=dlg1->selectedFiles()[0];
+
+       }
+       if(s_==nullptr||s__==nullptr){
+          QMessageBox::warning(this,"警告","选择路径不能为空！",QMessageBox::Yes);
+          return;
+       }
+      QVector<QPointF> r1=readExcel(s_);
+      QVector<QPointF> r2=readExcel(s__);
+      QVector<QPointF> plus;
+
+      if((r1.size()==r2.size())&&(!(r1.size()==0))&&(!(r2.size()==0))){
+
+          for(int i=0;i<r1.size();i++){
+             double t1,t2,x;
+             t1=r1.at(i).y();
+             t2=r2.at(i).y();
+             x=r1.at(i).x();
+             plus<<QPointF(x,t1+t2);
+          }
+          cal cl;
+          cl.createExcel(plus,"累加误差");
+          QMessageBox::information(this,"提示","处理成功！");
+      }else{
+          QMessageBox::warning(this,"警告","检查excel文档是否符合要求！");
+      }
+}
+//编辑
+void MainWindow::on_pb_edit_clicked()
+{
+   ui->plainTextEdit->setEnabled(true);
+}
+
+void MainWindow::on_pb_save_clicked()
+{
+    QString str;
+    str=ui->lineEdit_2->text();
+    QFile file(str);
+    if (!file.open(QIODevice::WriteOnly|QIODevice::Text))
+    {   MainWindow *m=new MainWindow;
+        QMessageBox::critical(m, "提示", "无法创建文件");
+    }
+
+    QTextStream in(&file);
+    QString text=ui->plainTextEdit->toPlainText();
+    in<<text;
+    in.flush();
+    file.close();
+
+    ui->plainTextEdit->setEnabled(false);
+    QMessageBox::information(this,"提示","已将修改过的代码保存至"+str,QMessageBox::Yes);
+}
+//修改文件路径
+void MainWindow::on_actionFile_triggered()
+{
+  QString str;
+  QFileDialog *dlg= new QFileDialog(this);
+  dlg->setWindowTitle("选择工作空间路径：");
 
 }

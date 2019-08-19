@@ -50,3 +50,6 @@ FORMS += \
 
 RESOURCES += \
     rc.qrc
+
+DISTFILES += \
+    F:/OCX/2016 ICON/Files/32px/Files-80.png

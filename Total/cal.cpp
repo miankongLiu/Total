@@ -72,6 +72,7 @@ QString cal::calculateZ(double clear, double single)
             for (int i=0;i<vec.size();i++){
                 double temp,t;
                  t=vec.at(i);
+                 qDebug()<<"x"<<t;
                  t=abs(t);//无论大于0或者小于0，z值关于y轴对称
                  //将t>=0修改为t>=-r_m/2
                 if(abs(t)<r_m/2){
@@ -326,7 +327,7 @@ QVector<QString> cal::modifyNC(QVector<double> v, QVector<double> v1, QVector<do
            QDateTime datetime;
            QString NC;
            QString timestr=datetime.currentDateTime().toString("yyyy-MM-dd-HH-mm-ss");
-           NC = dir_str+ "/"+timestr+p_Name+".nc";//假设指定文件夹路径为D盘根目录
+           NC = dir_str+ "/"+timestr+"-"+p_Name+".nc";//假设指定文件夹路径为D盘根目录
            NC.replace("/","\\");
 
            QFile file(NC);
@@ -351,6 +352,7 @@ QVector<QString> cal::modifyNC(QVector<double> v, QVector<double> v1, QVector<do
                in<<"N40 "<<"G01 "<<"X0"<<" F500"<<"\n";
                in<<"N50 "<<"M17"<<"\n";
                in<<"N60 "<<"M23 "<<"S3500 "<<"\n";
+
                in<<"N70 "<<"G01 "<<"X"<<x_cal<<" F500"<<"\n";
                if(machine=="LGS-300"){
                in<<"N75 "<<"G01 "<<"Y"<<Ybasic<<" F500"<<"\n";
@@ -374,8 +376,10 @@ QVector<QString> cal::modifyNC(QVector<double> v, QVector<double> v1, QVector<do
 
                for(int i=p_.size()-1;i>=0;i--){
                    m=130+j*5;
-                   //in<<"N"<<m<<" X"<<p_.at(i).x()<<"  Z"<<p_.at(i).y()+clear_single<<"  B"<<angle_real.at(i)<<"\n";
+
                    in<<"N"<<m<<" X"<<p_.at(i).x()<<"  Z"<<p_.at(i).y()-a*clear_single<<"  B"<<B_2.at(i)*57.3<<"\n";
+                   //改动
+                    //in<<"N"<<m<<" X"<<p_.at(i).x()+60<<"  Z"<<p_.at(i).y()-a*clear_single<<"  B"<<angle<<"\n";
                    j++;
                }
                in<<"N"<<m+1<<" G92 X0 Z0\n";
@@ -394,8 +398,10 @@ QVector<QString> cal::modifyNC(QVector<double> v, QVector<double> v1, QVector<do
 
                for(int i=p_.size()-1;i>=0;i--){
                    m_=n_+j_*5;
-                   //in<<"N"<<m_<<" X"<<p_.at(i).x()<<"  Z"<<p_.at(i).y()+surplus<<"  B"<<angle_real.at(i)<<"\n";
+
                    in<<"N"<<m_<<" X"<<p_.at(i).x()<<"  Z"<<p_.at(i).y()-surplus<<"  B"<<B_2.at(i)*57.3<<"\n";
+                   //改动
+                   //in<<"N"<<m<<" X"<<p_.at(i).x()+60<<"  Z"<<p_.at(i).y()-surplus<<"  B"<<angle<<"\n";
                    j_++;
 
                }
@@ -568,6 +574,105 @@ QVector<QString> cal::process(QVector<double> &d, QVector<double> &m, QVector<QS
        }else{
           return total;
        }
+
+
+}
+//补偿
+QVector<QString> cal::processCom(QVector<QPointF> a,QVector<QPointF> b,QVector<double> &d, QVector<double> &m, QVector<QString> &str, double clear, double single)
+{
+    R_=d.at(0);
+    r_m=d.at(1);//通光口径
+    K_=d.at(2);
+    C1_=d.at(3);
+    C2_=d.at(4);
+    C3_=d.at(5);
+    C4_=d.at(6);
+    C5_=d.at(7);
+    C6_=d.at(8);
+    C7_=d.at(9);
+    C8_=d.at(10);
+    C9_=d.at(11);
+    C10_=d.at(12);
+    C11_=d.at(13);
+    C12_=d.at(14);
+    A1_=d.at(15);
+    A2_=d.at(16);
+    A3_=d.at(17);
+
+    //字符串参数
+    p_Name=str[0];
+    step=str[1].toDouble();
+    type=str[2];
+    face=str[3];
+    radius=str[4];
+
+
+     angle=m.at(0);
+     Lt=m.at(1);
+     Dm=m.at(2);
+     r_=m.at(3);//轮端
+     Lb=m.at(4);
+     Xbasic=m.at(5);
+     Zbasic=m.at(6);
+     Hcenter=m.at(7);
+     Ybasic=m.at(8);
+
+     vec.clear();
+     vec_.clear();
+     C_.clear();
+     A_.clear();
+     Z_1.clear();
+     B_1.clear();
+     B_2.clear();
+     X_real.clear();
+     Z_real.clear();
+     //p1.clear();
+     total.clear();
+
+     Z_1=calculateZD(a);
+     B_2=calculateAngle();
+
+     QString s=tellAngle(B_1);
+     //理论
+     for(int i=0;i<a.size();i++){
+         vec<<a[i].x();
+         vec_<<a[i].y();
+     }
+
+     if(s=="符合"){
+         QVector<double> d=calculateClear(clear,single);
+         calculateInsert(vec,vec_,radius,face,type);
+         QVector<QPointF> r=calculatePoint_real(type);
+
+         QVector<QPointF> real;
+         QVector<double> Z_real1;
+         for(int i=0;i<b.size();i++){
+
+            double t=b.at(i).y();
+            double t1=r.at(i).y();
+            QPointF ex;
+            ex.setX(r.at(i).x());
+            ex.setY(t+t1);
+            Z_real1<<t+t1;
+            real<<ex;
+         }
+
+         total=modifyNC(vec,vec_,d,type,face,p_Name,real);
+
+         chartDlg ch;
+         ch.drawPlot(X_real,Z_real1,"补偿后");
+         createExcel(real,"补偿后");
+     }else{
+         MainWindow m;
+
+         QMessageBox::warning(&m,"警告","请检查偏置角参数是否错误，夹角超过90度,建议偏置角不超过"+s+"度！",QMessageBox::Yes);
+
+     }
+
+
+
+
+return total;
 
 
 }

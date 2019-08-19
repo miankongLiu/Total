@@ -34,7 +34,7 @@ void calculate::process()
 
 }
 
-void calculate::displatAndPro(QVector<double> d,QVector<double> m)
+void calculate::displatAndPro(QVector<double> d,QVector<double> m,QVector<QString >st)
 {   if(d.size()<=0||m.size()<=0){
         QMessageBox::warning(this,"警告","请检查计算参数是否输入！");
         return;
@@ -68,15 +68,27 @@ void calculate::displatAndPro(QVector<double> d,QVector<double> m)
      Hcenter=m.at(7);
      Ybasic=m.at(8);
 
+     //字符串参数
+     p_Name=st[0];
+     step=st[1].toDouble();
+     type=st[2];
+     face=st[3];
+     radius=st[4];
 
+     ui->p_Name->setText(p_Name);
+     ui->p_face->setText(face);
+     ui->p_step->setText(st[1]);
+     ui->p_type->setText(type);
+     ui->p_radius->setText(radius);
      this->show();
 
 }
 
 void calculate::on_pb_Yes_clicked()
 {
+
     QString p_N,p_T,p_F;
-    double r,step,free;
+    double r,free;
     QVector<double> x_test;
     QVector<double> z_test;
     QVector<double> test_C;
@@ -85,23 +97,19 @@ void calculate::on_pb_Yes_clicked()
     QVector<double> ang;
     QVector<QPointF> end;
 
-    int a;
-    if(p_T=="LGS-200"){
-        a=1;
-    }else{
-        a=-1;
-    }
 
-    p_N=ui->p_Name->text();
-    p_F=ui->comboBox->currentText();
     //暂时不要
-    p_T=ui->comboBox_2->currentText();
-    ui->comboBox_2->hide();
-    ui->label_6->hide();
 
-    r=ui->p_r->text().toDouble();
+
+    p_Name=ui->p_Name->text();
     step=ui->p_step->text().toDouble();
+    radius=ui->p_radius->text();
+    type=ui->p_type->text();
+    face=ui->p_face->text();
+
     free=ui->p_free->text().toDouble();
+    r=ui->p_r->text().toDouble();
+
 
     //减去免测后的x
     double num=((r_m/2)-(free/2))/step;
@@ -112,7 +120,60 @@ void calculate::on_pb_Yes_clicked()
       x_test<<temp;
     }
      x_test<<(r_m/2)-(free/2);
-     //计算z
+     if(radius=="半口径"){
+             double num=(r_m/2)/step;
+             num=ceil(num);//向上取整
+
+             for(int i=0;i<num;i++){
+                 double temp;
+                 temp=step*i;
+                 x_test<<temp;
+             }
+             x_test<<(r_m/2)-(free/2);
+         }else if(radius=="全口径"){
+             double num=(r_m/2)/step;
+             num=ceil(num);//向上取整
+
+             for(int i=0;i<num;i++){
+                 double temp;
+                 temp=step*i;
+                 x_test<<temp;
+             }
+             x_test<<(r_m/2)-(free/2);
+             int size=x_test.size();
+             QVector<double> t;
+
+             for(int i=size-1;i>1;i--){
+                    double temp=x_test.at(i);
+                     t<<-temp;
+                         }
+             for(int i=0;i<size;i++){
+                    double temp=x_test.at(i);
+                     t<<temp;
+                         }
+             x_test=t;
+         }
+
+             for (int i=0;i<x_test.size();i++){
+                 double temp,t;
+                  t=x_test.at(i);
+                  t=abs(t);//无论大于0或者小于0，z值关于y轴对称
+                  //将t>=0修改为t>=-r_m/2
+                 if(abs(t)<r_m/2){
+
+                  temp=(qPow(t,2))/(R_*(1+qSqrt(1-(1+K_)*qPow(t/R_,2))))+C1_+C2_*qPow(t,2)+C3_*qPow(t,4)+C4_*qPow(t,6)+C5_*qPow(t,8)+C6_*qPow(t,10)+C7_*qPow(t,12)+C8_*qPow(t,14)+C9_*qPow(t,16)+C10_*qPow(t,18)+C11_*qPow(t,20)+C12_*qPow(t,22);
+
+                 }else if(t>=r_m/2){
+
+                  temp=(qPow(t,2))/(R_*(1+qSqrt(1-(1+K_)*qPow(t/R_,2))))+C1_+C2_*qPow(t,2)+C3_*qPow(t,4)+C4_*qPow(t,6)+C5_*qPow(t,8)+C6_*qPow(t,10)+C7_*qPow(t,12)+C8_*qPow(t,14)+C9_*qPow(t,16)+C10_*qPow(t,18)+C11_*qPow(t,20)+C12_*qPow(t,22)
+                          +A1_*qPow(t,2)+A2_*qPow(t,3)+A3_*qPow(t,4);
+
+                 }
+
+                 z_test<<temp;
+             }
+
+     /*//计算z
      for (int i=0;i<x_test.size();i++){
           double temp,t;
           t=x_test.at(i);
@@ -130,7 +191,7 @@ void calculate::on_pb_Yes_clicked()
          }
 
          z_test<<temp;
-     }
+     }*/
 
      for(int i=0;i<x_test.size();i++){
      //计算C&A
@@ -188,17 +249,23 @@ void calculate::on_pb_Yes_clicked()
         int sign;
         if(an>=0) sign=1;
         if(an<0) sign=-1;
-        int t;
-        if(p_F=="凹面")t=1;
-        else{
+        int t=0;
+        if(type=="LGS-200"){
             t=-1;
+        }
+        else if(type=="LGS-300"){
+            t=1;
         }
 
         double x1=-r*qSin(an);
         double z1=r*(1-qCos(an));
         QPointF ex;
-        ex.setX(x+t*x1);
-        ex.setY(-z-t*z1);
+
+        //ex.setX(x+t*x1);
+        //ex.setY(-z-t*z1);
+        ex.setX(t*(x-x1));
+        ex.setY(t*(z-z1));
+
         end<<ex;
      }
 
@@ -216,14 +283,14 @@ void calculate::on_pb_Yes_clicked()
       double x0,z0;
       x0=0;
       z0=0;
-      double x3,z3,z_a,x_a;
+      double x3,z3;
       x3=-r*qSin(0);
       z3=r*(qCos(0)-1);
       x_0=Xbasic+(0-x3);
       z_0=Zbasic-Hcenter+(0-z3);
       QString NC;
       QString dir_str="D:/comTest";
-      NC = dir_str+ "/"+"检测"+p_N+".nc";//假设指定文件夹路径为D盘根目录
+      NC = dir_str+ "/"+"检测"+p_Name+".nc";//假设指定文件夹路径为D盘根目录
                  NC.replace("/","\\");
 
                  QFile file(NC);
@@ -235,7 +302,7 @@ void calculate::on_pb_Yes_clicked()
 
                  QTextStream in(&file);
                  in<<"%"<<"\n";
-                 in<<p_N<<"\n";
+                 in<<p_Name<<"\n";
                  in<<"N10 G90 \n";
                  in<<"N20 G04 F3000 \n";
                  in<<"N30 G01 X"<<x_0<<"F1000 \n";
@@ -247,7 +314,7 @@ void calculate::on_pb_Yes_clicked()
                  in<<"*N85 P80=1 \n";
                  int n=90;
                  int j=0;
-                 int m=x_test.size();
+
 
                  for(int i=x_test.size()-1;i>=0;i--){
                  in<<"N"<<n+10*j<<" G01 X"<<end[i].x()<<" Z"<<end[i].y()<<"\n";
@@ -260,6 +327,13 @@ void calculate::on_pb_Yes_clicked()
 
                  in.flush();
                  file.close();
+
+
+
+                 QMessageBox::information(this,"提示","检测程序生成成功保存到"+NC,QMessageBox::Yes);
+                 this->close();
+
+
 
 }
 

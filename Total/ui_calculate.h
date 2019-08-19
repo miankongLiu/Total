@@ -13,7 +13,6 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
@@ -29,6 +28,7 @@ class Ui_calculate
 {
 public:
     QGridLayout *gridLayout;
+    QPushButton *pb_Yes;
     QHBoxLayout *horizontalLayout;
     QVBoxLayout *verticalLayout;
     QLabel *label;
@@ -37,14 +37,15 @@ public:
     QLabel *label_4;
     QLabel *label_5;
     QLabel *label_6;
+    QLabel *label_7;
     QVBoxLayout *verticalLayout_2;
     QLineEdit *p_Name;
     QLineEdit *p_r;
     QLineEdit *p_step;
     QLineEdit *p_free;
-    QComboBox *comboBox;
-    QComboBox *comboBox_2;
-    QPushButton *pb_Yes;
+    QLineEdit *p_face;
+    QLineEdit *p_type;
+    QLineEdit *p_radius;
     QPushButton *pb_Cancel;
 
     void setupUi(QDialog *calculate)
@@ -450,6 +451,11 @@ public:
 ""));
         gridLayout = new QGridLayout(calculate);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
+        pb_Yes = new QPushButton(calculate);
+        pb_Yes->setObjectName(QStringLiteral("pb_Yes"));
+
+        gridLayout->addWidget(pb_Yes, 1, 0, 1, 1);
+
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         verticalLayout = new QVBoxLayout();
@@ -484,6 +490,11 @@ public:
 
         verticalLayout->addWidget(label_6);
 
+        label_7 = new QLabel(calculate);
+        label_7->setObjectName(QStringLiteral("label_7"));
+
+        verticalLayout->addWidget(label_7);
+
 
         horizontalLayout->addLayout(verticalLayout);
 
@@ -509,30 +520,26 @@ public:
 
         verticalLayout_2->addWidget(p_free);
 
-        comboBox = new QComboBox(calculate);
-        comboBox->addItem(QString());
-        comboBox->addItem(QString());
-        comboBox->setObjectName(QStringLiteral("comboBox"));
+        p_face = new QLineEdit(calculate);
+        p_face->setObjectName(QStringLiteral("p_face"));
 
-        verticalLayout_2->addWidget(comboBox);
+        verticalLayout_2->addWidget(p_face);
 
-        comboBox_2 = new QComboBox(calculate);
-        comboBox_2->addItem(QString());
-        comboBox_2->addItem(QString());
-        comboBox_2->setObjectName(QStringLiteral("comboBox_2"));
+        p_type = new QLineEdit(calculate);
+        p_type->setObjectName(QStringLiteral("p_type"));
 
-        verticalLayout_2->addWidget(comboBox_2);
+        verticalLayout_2->addWidget(p_type);
+
+        p_radius = new QLineEdit(calculate);
+        p_radius->setObjectName(QStringLiteral("p_radius"));
+
+        verticalLayout_2->addWidget(p_radius);
 
 
         horizontalLayout->addLayout(verticalLayout_2);
 
 
         gridLayout->addLayout(horizontalLayout, 0, 0, 1, 2);
-
-        pb_Yes = new QPushButton(calculate);
-        pb_Yes->setObjectName(QStringLiteral("pb_Yes"));
-
-        gridLayout->addWidget(pb_Yes, 1, 0, 1, 1);
 
         pb_Cancel = new QPushButton(calculate);
         pb_Cancel->setObjectName(QStringLiteral("pb_Cancel"));
@@ -548,19 +555,14 @@ public:
     void retranslateUi(QDialog *calculate)
     {
         calculate->setWindowTitle(QApplication::translate("calculate", "Dialog", nullptr));
+        pb_Yes->setText(QApplication::translate("calculate", "\347\241\256\350\256\244", nullptr));
         label->setText(QApplication::translate("calculate", "\347\250\213\345\272\217\345\220\215", nullptr));
         label_2->setText(QApplication::translate("calculate", "\346\265\213\345\244\264\345\215\212\345\276\204", nullptr));
         label_3->setText(QApplication::translate("calculate", "\346\265\213\351\207\217\346\255\245\351\225\277", nullptr));
         label_4->setText(QApplication::translate("calculate", "\345\205\215\346\265\213\350\267\235\347\246\273", nullptr));
         label_5->setText(QApplication::translate("calculate", "\345\207\271\345\207\270\351\235\242", nullptr));
         label_6->setText(QApplication::translate("calculate", "\346\234\272\345\236\213", nullptr));
-        comboBox->setItemText(0, QApplication::translate("calculate", "\345\207\271", nullptr));
-        comboBox->setItemText(1, QApplication::translate("calculate", "\345\207\270", nullptr));
-
-        comboBox_2->setItemText(0, QApplication::translate("calculate", "LGS-200", nullptr));
-        comboBox_2->setItemText(1, QApplication::translate("calculate", "LGS-300", nullptr));
-
-        pb_Yes->setText(QApplication::translate("calculate", "\347\241\256\350\256\244", nullptr));
+        label_7->setText(QApplication::translate("calculate", "\345\217\243\345\276\204", nullptr));
         pb_Cancel->setText(QApplication::translate("calculate", "\345\217\226\346\266\210", nullptr));
     } // retranslateUi
 

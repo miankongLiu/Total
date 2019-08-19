@@ -18,6 +18,8 @@ public:
     QVector<QPointF> calculatePoint_real(QString type);
     QVector<double> calculateClear(double clear,double single);
     QVector<QString>  process(QVector<double>& d,QVector<double>& m,QVector<QString>& str,double clear,double single);
+    QVector<QString>  processCom(QVector<QPointF> a,QVector<QPointF> b,QVector<double>& d,QVector<double>& m,QVector<QString>& str,double clear,double single);
+    void createExcel(QVector<QPointF> p,QString name);
 
     QVector<double> vec,vec_,C_,A_,Z_1,B,angle_real,X_real,Z_real;
     QVector<QPointF> p1;
@@ -29,6 +31,7 @@ public:
     QString dir_str;
     QVector<double> B_1,B_2;//弧度值
 
+
 private:
 
     double R_,r_m,K_,C1_,C2_,C3_,C4_,C5_,C6_,C7_,C8_,C9_,C10_,C11_,C12_,A1_,A2_,A3_;
@@ -39,7 +42,7 @@ private:
 
     QString tellAngle(QVector<double> a);
 
-    void createExcel(QVector<QPointF> p,QString name);
+
 
 };
 

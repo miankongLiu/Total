@@ -403,6 +403,13 @@ background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #F2F3F4,stop:1 
 </string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0">
+    <widget class="QPushButton" name="pb_Yes">
+     <property name="text">
+      <string>确认</string>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
@@ -449,6 +456,13 @@ background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #F2F3F4,stop:1 
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>口径</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
@@ -466,43 +480,17 @@ background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #F2F3F4,stop:1 
         <widget class="QLineEdit" name="p_free"/>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox">
-         <item>
-          <property name="text">
-           <string>凹</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>凸</string>
-          </property>
-         </item>
-        </widget>
+        <widget class="QLineEdit" name="p_face"/>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox_2">
-         <item>
-          <property name="text">
-           <string>LGS-200</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>LGS-300</string>
-          </property>
-         </item>
-        </widget>
+        <widget class="QLineEdit" name="p_type"/>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="p_radius"/>
        </item>
       </layout>
      </item>
     </layout>
-   </item>
-   <item row="1" column="0">
-    <widget class="QPushButton" name="pb_Yes">
-     <property name="text">
-      <string>确认</string>
-     </property>
-    </widget>
    </item>
    <item row="1" column="1">
     <widget class="QPushButton" name="pb_Cancel">
