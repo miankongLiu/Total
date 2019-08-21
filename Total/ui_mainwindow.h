@@ -41,6 +41,9 @@ public:
     QAction *actioncalculate;
     QAction *actionPlus;
     QAction *actionTransfer;
+    QAction *actionFile;
+    QAction *actionhelp;
+    QAction *actionroot;
     QWidget *centralWidget;
     QGridLayout *gridLayout_4;
     QVBoxLayout *verticalLayout_6;
@@ -514,6 +517,12 @@ public:
         QIcon icon5;
         icon5.addFile(QStringLiteral(":/new/prefix1/F:/OCX/2016 ICON/Controls/32px/controls-77.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionTransfer->setIcon(icon5);
+        actionFile = new QAction(MainWindow);
+        actionFile->setObjectName(QStringLiteral("actionFile"));
+        actionhelp = new QAction(MainWindow);
+        actionhelp->setObjectName(QStringLiteral("actionhelp"));
+        actionroot = new QAction(MainWindow);
+        actionroot->setObjectName(QStringLiteral("actionroot"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout_4 = new QGridLayout(centralWidget);
@@ -1522,6 +1531,9 @@ public:
 
         menuBar->addAction(menu->menuAction());
         menuBar->addAction(menu_2->menuAction());
+        menu->addAction(actionFile);
+        menu_2->addAction(actionhelp);
+        menu_2->addAction(actionroot);
         mainToolBar->addAction(actionhome);
         mainToolBar->addAction(actioninfoTool);
         mainToolBar->addAction(actioninfoMacine);
@@ -1546,6 +1558,12 @@ public:
 #endif // QT_NO_TOOLTIP
         actionPlus->setText(QApplication::translate("MainWindow", "\347\264\257\345\212\240\345\244\204\347\220\206", nullptr));
         actionTransfer->setText(QApplication::translate("MainWindow", "\346\226\207\344\273\266\350\275\254\346\215\242", nullptr));
+        actionFile->setText(QApplication::translate("MainWindow", "\346\226\207\344\273\266\350\267\257\345\276\204", nullptr));
+#ifndef QT_NO_TOOLTIP
+        actionFile->setToolTip(QApplication::translate("MainWindow", "\346\226\207\344\273\266\350\267\257\345\276\204", nullptr));
+#endif // QT_NO_TOOLTIP
+        actionhelp->setText(QApplication::translate("MainWindow", "\345\270\256\345\212\251\346\226\207\346\241\243", nullptr));
+        actionroot->setText(QApplication::translate("MainWindow", "\345\255\230\345\202\250\350\267\257\345\276\204\350\257\264\346\230\216", nullptr));
         groupBox->setTitle(QApplication::translate("MainWindow", "\345\237\272\346\234\254\344\277\241\346\201\257", nullptr));
         label_5->setText(QApplication::translate("MainWindow", "\345\215\225\346\254\241\345\216\273\351\231\244\351\207\217", nullptr));
         label_6->setText(QApplication::translate("MainWindow", "\346\200\273\345\216\273\351\231\244\351\207\217", nullptr));
@@ -1559,7 +1577,7 @@ public:
         pb_edit->setText(QApplication::translate("MainWindow", "\347\274\226\350\276\221", nullptr));
         pb_save->setText(QApplication::translate("MainWindow", "\344\277\235\345\255\230", nullptr));
         menu->setTitle(QApplication::translate("MainWindow", "\350\256\276\347\275\256", nullptr));
-        menu_2->setTitle(QApplication::translate("MainWindow", "\345\270\256\345\212\251\346\226\207\346\241\243", nullptr));
+        menu_2->setTitle(QApplication::translate("MainWindow", "\345\270\256\345\212\251", nullptr));
     } // retranslateUi
 
 };

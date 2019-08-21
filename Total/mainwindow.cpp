@@ -11,6 +11,11 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QDateTime>
+#include <QDialog>
+#include <QTextBrowser>
+#include <QUrl>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #pragma execution_character_set("utf-8")
 using namespace std;
 
@@ -25,6 +30,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     dir_str="D:/comTest";
+    QDir* dir = new QDir();
+    if(!dir->exists(dir_str)){
+        dir->mkpath(dir_str);
+    }
     ui->mainToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
  }
@@ -307,7 +316,7 @@ void MainWindow::on_pb_caculate_clicked()
 
     if(tellData()==true){
         cal cl;
-        QVector<QString> ts=cl.process(cal_info,machine,st,clear_Total,clear_single);
+        QVector<QString> ts=cl.process(cal_info,machine,st,clear_Total,clear_single,dir_str);
 
         if(!ts.isEmpty()){
             setString(ts[1],ts[0]);}
@@ -438,7 +447,7 @@ void MainWindow::on_pb_compensation_clicked()
 
         if(tellData()==true){
             cal cl;
-         QVector<QString> total=cl.processCom(r1,r2,cal_info,machine,st,clear_Total,clear_single);
+         QVector<QString> total=cl.processCom(r1,r2,cal_info,machine,st,clear_Total,clear_single,dir_str);
 
          if(!total.isEmpty()){
              setString(total[1],total[0]);}
@@ -662,8 +671,53 @@ void MainWindow::on_pb_save_clicked()
 //修改文件路径
 void MainWindow::on_actionFile_triggered()
 {
-  QString str;
-  QFileDialog *dlg= new QFileDialog(this);
-  dlg->setWindowTitle("选择工作空间路径：");
+   QString file_path = QFileDialog::getExistingDirectory(this, "请选择文件路径...", "./");
+    if(file_path.isEmpty())
+    {
+        return;
+    }
+    dir_str=file_path;
+   QMessageBox::information(this,"提示","当前路径修改为："+file_path,QMessageBox::Yes);
 
+}
+
+void MainWindow::on_actionhelp_triggered()
+{
+
+    QWidget *w=new QWidget;
+    QVBoxLayout *vb=new QVBoxLayout;
+    QTextBrowser *b=new QTextBrowser;
+    vb->addWidget(b);
+    w->setLayout(vb);
+
+    QFile file(".\\help.htm");
+    if(!file.open(QFile::ReadOnly | QFile::Text))
+    QMessageBox::information(this, QStringLiteral("提示"), QStringLiteral("打不开文件"));
+    QTextStream textStream(&file);
+    b->setHtml(textStream.readAll());
+
+    w->setWindowTitle("帮助文档");
+    w->resize(500,500);
+    w->show();
+
+
+}
+
+void MainWindow::on_actionroot_triggered()
+{
+    QWidget *w=new QWidget;
+    QVBoxLayout *vb=new QVBoxLayout;
+    QTextBrowser *b=new QTextBrowser;
+    vb->addWidget(b);
+    w->setLayout(vb);
+
+    QFile file(".\\root.txt");
+    if(!file.open(QFile::ReadOnly | QFile::Text))
+    QMessageBox::information(this, QStringLiteral("提示"), QStringLiteral("打不开文件"));
+    QTextStream textStream(&file);
+    b->setText(textStream.readAll());
+
+    w->setWindowTitle("路径说明");
+    w->resize(500,500);
+    w->show();
 }

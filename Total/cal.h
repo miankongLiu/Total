@@ -17,8 +17,8 @@ public:
     QVector<QPointF> calculatePoint(QString type,QVector<double>p);
     QVector<QPointF> calculatePoint_real(QString type);
     QVector<double> calculateClear(double clear,double single);
-    QVector<QString>  process(QVector<double>& d,QVector<double>& m,QVector<QString>& str,double clear,double single);
-    QVector<QString>  processCom(QVector<QPointF> a,QVector<QPointF> b,QVector<double>& d,QVector<double>& m,QVector<QString>& str,double clear,double single);
+    QVector<QString>  process(QVector<double>& d,QVector<double>& m,QVector<QString>& str,double clear,double single,QString path);
+    QVector<QString>  processCom(QVector<QPointF> a,QVector<QPointF> b,QVector<double>& d,QVector<double>& m,QVector<QString>& str,double clear,double single,QString path);
     void createExcel(QVector<QPointF> p,QString name);
 
     QVector<double> vec,vec_,C_,A_,Z_1,B,angle_real,X_real,Z_real;

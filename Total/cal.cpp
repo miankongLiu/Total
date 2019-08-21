@@ -15,7 +15,7 @@
 #pragma execution_character_set("utf-8")
 cal::cal()
 {
-   dir_str="D:/comTest";
+   //dir_str="D:/comTest";
 }
 
 QString cal::calculateZ(double clear, double single)
@@ -527,7 +527,7 @@ QVector<double> cal::calculateClear(double clear, double single)
           return res;
 }
 
-QVector<QString> cal::process(QVector<double> &d, QVector<double> &m, QVector<QString> &str, double clear, double single)
+QVector<QString> cal::process(QVector<double> &d, QVector<double> &m, QVector<QString> &str, double clear, double single,QString path)
 {
        R_=d.at(0);
        r_m=d.at(1);//通光口径
@@ -566,6 +566,7 @@ QVector<QString> cal::process(QVector<double> &d, QVector<double> &m, QVector<QS
         Hcenter=m.at(7);
         Ybasic=m.at(8);
 
+        dir_str=path;
 
        QString s=calculateZ(clear,single);
        if(s!="符合"){
@@ -578,7 +579,7 @@ QVector<QString> cal::process(QVector<double> &d, QVector<double> &m, QVector<QS
 
 }
 //补偿
-QVector<QString> cal::processCom(QVector<QPointF> a,QVector<QPointF> b,QVector<double> &d, QVector<double> &m, QVector<QString> &str, double clear, double single)
+QVector<QString> cal::processCom(QVector<QPointF> a,QVector<QPointF> b,QVector<double> &d, QVector<double> &m, QVector<QString> &str, double clear, double single,QString path)
 {
     R_=d.at(0);
     r_m=d.at(1);//通光口径
@@ -632,6 +633,7 @@ QVector<QString> cal::processCom(QVector<QPointF> a,QVector<QPointF> b,QVector<d
      Z_1=calculateZD(a);
      B_2=calculateAngle();
 
+     dir_str=path;
      QString s=tellAngle(B_1);
      //理论
      for(int i=0;i<a.size();i++){

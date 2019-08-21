@@ -69,6 +69,8 @@ private slots:
      void on_pb_edit_clicked();
      void on_pb_save_clicked();
      void on_actionFile_triggered();
+     void on_actionhelp_triggered();
+     void on_actionroot_triggered();
 };
 
 #endif // MAINWINDOW_H
