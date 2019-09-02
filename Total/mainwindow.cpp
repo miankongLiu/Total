@@ -125,7 +125,7 @@ bool MainWindow::tellData()
 {   warn="";
     clear_single=ui->edit_sigle->text().toDouble();
     clear_Total=ui->edit_total->text().toDouble();
-    if(R==0.0||r_m==0.0||K==0.0||Lb==0.0){
+    if(R==0.0||r_m==0.0||Lb==0.0){
         warn="请仔细检查计算参数！不能为0！";
     }
     if(clear_single==0.0){

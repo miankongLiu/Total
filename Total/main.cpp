@@ -3,7 +3,7 @@
 #include "infotool.h"
 #include "calculate.h"
 #include <QApplication>
-
+#pragma execution_character_set("utf-8")
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     QObject::connect(&w,SIGNAL(showCalTest(QVector<double>,QVector<double>,QVector<QString >)),&cal,SLOT(displatAndPro(QVector<double>,QVector<double>,QVector<QString>)),Qt::UniqueConnection);
     QObject::connect(&inf,SIGNAL(sendData(QVector<double>,QVector<QString>)),&w,SLOT(receiveData(QVector<double>,QVector<QString>)));
     QObject::connect(&inf,SIGNAL(sendStr(QVector<QString>)),&w,SLOT(receiveString(QVector<QString>)));
-
+    w.setWindowTitle("非球面加工");
     w.show();
     return a.exec();
 }

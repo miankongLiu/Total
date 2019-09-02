@@ -72,7 +72,7 @@ QString cal::calculateZ(double clear, double single)
             for (int i=0;i<vec.size();i++){
                 double temp,t;
                  t=vec.at(i);
-                 qDebug()<<"x"<<t;
+
                  t=abs(t);//无论大于0或者小于0，z值关于y轴对称
                  //将t>=0修改为t>=-r_m/2
                 if(abs(t)<r_m/2){
@@ -155,8 +155,7 @@ QVector<double> cal::calculateZD(QVector<QPointF> p)
           }
 
        }
-       qDebug()<<"Angle"<<p.size();
-       qDebug()<<"导数"<<z1.size();
+
        return z1;
 }
 
@@ -192,7 +191,9 @@ QVector<double> cal::calculateAngle()
             //angle_real<<a_real;//角度
             b<<a_real/57.3;//弧度
             B_1<<a_real;
+
         }
+
         return b;
 }
 
@@ -208,7 +209,8 @@ void cal::calculateInsert(QVector<double> v, QVector<double> v1, QString radius,
                   }else{
                     t_begin=v.at(v.size()-2);
                     t_begin=qAbs(t_begin);
-                    a_t=B_2.at((B_2.size()-1)/2);
+                    //a_t=B_2.at((B_2.size()-1)/2);
+                    a_t=B_2.at(B_2.size()-1);
                   }
 
                    t_beginZ=v1.at(v1.size()-1);
@@ -232,7 +234,8 @@ void cal::calculateInsert(QVector<double> v, QVector<double> v1, QString radius,
                          angle_begin=angle+a_t*57.3;
                          angle_=angle_begin/57.3;
                      }else{
-                         a_t=B_2.at((B_2.size()-1)/2);
+                         //a_t=B_2.at((B_2.size()-1)/2);
+                         a_t=B_2.at(B_2.size()-1);
                          angle_begin=angle+a_t*57.3;
                          angle_=angle_begin/57.3;
                      }
@@ -280,7 +283,7 @@ void cal::calculateInsert(QVector<double> v, QVector<double> v1, QString radius,
               x3=-r_*sin(a_t);
               z1=(a*Lb+Lt-r_)*(1-cos(angle_));
               z2=-sign*Dm/2*sin(angle_);
-              z3=-r_*(1-cos(a_t));
+              z3=r_*(1-cos(a_t));
               //偏差值
               x=x1+x2+x3-x0;
               z=z1+z2+z3-z0;
@@ -367,6 +370,7 @@ QVector<QString> cal::modifyNC(QVector<double> v, QVector<double> v1, QVector<do
                in<<"N105 "<<"G92 X0 Z0  \n";
                in<<"*N110 P200=1 \n";
                in<<"N115 G01 Z"<<z_safe<< " F100\n";
+               //in<<"N120 X"<<x_begin+70<<"  B"<<angle_begin<<"\n";
                in<<"N120 X"<<x_begin<<"  B"<<angle_begin<<"\n";
                //in<<"N125 Z"<<z_begin+clear_single<<"\n";
                in<<"N125 Z"<<z_begin-clear_single<<"\n";
@@ -377,9 +381,10 @@ QVector<QString> cal::modifyNC(QVector<double> v, QVector<double> v1, QVector<do
                for(int i=p_.size()-1;i>=0;i--){
                    m=130+j*5;
 
-                   in<<"N"<<m<<" X"<<p_.at(i).x()<<"  Z"<<p_.at(i).y()-a*clear_single<<"  B"<<B_2.at(i)*57.3<<"\n";
+                   in<<"N"<<m<<" X"<<-p_.at(i).x()<<"  Z"<<p_.at(i).y()-a*clear_single<<"  B"<<B_2.at(i)*57.3<<"\n";
                    //改动
-                    //in<<"N"<<m<<" X"<<p_.at(i).x()+60<<"  Z"<<p_.at(i).y()-a*clear_single<<"  B"<<angle<<"\n";
+                   //in<<"N"<<m<<" X"<<-p_.at(i).x()+70<<"  Z"<<p_.at(i).y()-a*clear_single<<"  B"<<B_2.at(i)*57.3<<"\n";
+
                    j++;
                }
                in<<"N"<<m+1<<" G92 X0 Z0\n";
@@ -399,9 +404,9 @@ QVector<QString> cal::modifyNC(QVector<double> v, QVector<double> v1, QVector<do
                for(int i=p_.size()-1;i>=0;i--){
                    m_=n_+j_*5;
 
-                   in<<"N"<<m_<<" X"<<p_.at(i).x()<<"  Z"<<p_.at(i).y()-surplus<<"  B"<<B_2.at(i)*57.3<<"\n";
+                   in<<"N"<<m_<<" X"<<-p_.at(i).x()<<"  Z"<<p_.at(i).y()-surplus<<"  B"<<B_2.at(i)*57.3<<"\n";
                    //改动
-                   //in<<"N"<<m<<" X"<<p_.at(i).x()+60<<"  Z"<<p_.at(i).y()-surplus<<"  B"<<angle<<"\n";
+                   //in<<"N"<<m<<" X"<<-p_.at(i).x()+70<<"  Z"<<p_.at(i).y()-surplus<<"  B"<<B_2.at(i)*57.3<<"\n";
                    j_++;
 
                }
@@ -458,7 +463,7 @@ QVector<QPointF> cal::calculatePoint(QString type, QVector<double> p)
             //顶点处，b=0
             double ang1=angle/57.3;
             x0=-(a*Lb+Lt-r_)*sin(ang1)-sign*Dm/2*(1-cos(ang1))-r_*sin(0);
-            z0=(a*Lb+Lt-r_)*(1-cos(ang1))-sign*Dm/2*sin(ang1)-r_*(1-cos(0));
+            z0=(a*Lb+Lt-r_)*(1-cos(ang1))-sign*Dm/2*sin(ang1)+r_*(1-cos(0));
             //对刀点
             x_cal=Xbasic-a*(sign*(Dm/2)+x0);
             z_cal=Zbasic-Hcenter-a*(0+z0);
@@ -469,7 +474,7 @@ QVector<QPointF> cal::calculatePoint(QString type, QVector<double> p)
             x3=-r_*sin(b);
             z1=(a*Lb+Lt-r_)*(1-cos(ang));
             z2=-sign*Dm/2*sin(ang);
-            z3=-r_*(1-cos(b));
+            z3=r_*(1-cos(b));
             //偏差值
             x=x1+x2+x3;
             z=z1+z2+z3;
