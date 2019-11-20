@@ -83,7 +83,7 @@ void calculate::displatAndPro(QVector<double> d,QVector<double> m,QVector<QStrin
      this->show();
 
 }
-
+//检测程序
 void calculate::on_pb_Yes_clicked()
 {
 
@@ -114,12 +114,13 @@ void calculate::on_pb_Yes_clicked()
     //减去免测后的x
     double num=((r_m/2)-(free/2))/step;
     num=ceil(num);
-    for(int i=0;i<num;i++){
+    /*for(int i=0;i<num;i++){
       double temp;
       temp=step*i;
       x_test<<temp;
     }
-     x_test<<(r_m/2)-(free/2);
+     x_test<<(r_m/2)-(free/2);*/
+
      if(radius=="半口径"){
              double num=(r_m/2)/step;
              num=ceil(num);//向上取整
@@ -140,6 +141,7 @@ void calculate::on_pb_Yes_clicked()
                  x_test<<temp;
              }
              x_test<<(r_m/2)-(free/2);
+
              int size=x_test.size();
              QVector<double> t;
 
@@ -237,7 +239,8 @@ void calculate::on_pb_Yes_clicked()
          double a;
          a=-atan(a1);
          //弧度
-         a_real=angle+a*57.3;
+         //a_real=angle+a*57.3;
+         a_real=a*57.3;
          ang<<a_real/57.3;//弧度
      }
 
@@ -304,17 +307,19 @@ void calculate::on_pb_Yes_clicked()
                  in<<"%"<<"\n";
                  in<<p_Name<<"\n";
                  in<<"N10 G90 \n";
+                 in<<"*N15 P80=0 \n";
                  in<<"N20 G04 F3000 \n";
                  in<<"N30 G01 X"<<x_0<<"F1000 \n";
                  in<<"N40 G04 F3000 \n";
                  in<<"N50 G01 Z"<<z_0<<"F500 \n";
                  in<<"N60 G04 F3000 \n";
                  in<<"N70 G92 X0 Z0 \n";
-                 in<<"N80 G04 F3000 \n";
+                 //in<<"N80 G04 F3000 \n";
+                 in<<"N75 G01 X0.1 \n";
+                 in<<"N80 G10 \n";
                  in<<"*N85 P80=1 \n";
                  int n=90;
                  int j=0;
-
 
                  for(int i=x_test.size()-1;i>=0;i--){
                  in<<"N"<<n+10*j<<" G01 X"<<end[i].x()<<" Z"<<end[i].y()<<"\n";
@@ -328,11 +333,8 @@ void calculate::on_pb_Yes_clicked()
                  in.flush();
                  file.close();
 
-
-
                  QMessageBox::information(this,"提示","检测程序生成成功保存到"+NC,QMessageBox::Yes);
                  this->close();
-
 
 
 }

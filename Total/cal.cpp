@@ -72,7 +72,6 @@ QString cal::calculateZ(double clear, double single)
             for (int i=0;i<vec.size();i++){
                 double temp,t;
                  t=vec.at(i);
-
                  t=abs(t);//无论大于0或者小于0，z值关于y轴对称
                  //将t>=0修改为t>=-r_m/2
                 if(abs(t)<r_m/2){
@@ -199,25 +198,30 @@ QVector<double> cal::calculateAngle()
 
 void cal::calculateInsert(QVector<double> v, QVector<double> v1, QString radius, QString face, QString machine)
 {
-    double t_begin,t_beginZ,angle_,a_t;
-          double J=-(1+K_)/qPow(R_,2);
-
+         double t_begin,t_beginZ,angle_,a_t;
+         double J=-(1+K_)/qPow(R_,2);
+         angle_=0;
+         a_t=0;
+         t_begin=0;
+         t_beginZ=0;
               if(face=="凹面"){
                   if(radius=="半口径"){
                     t_begin=v.at(v.size()-2);
-                    a_t=B_2.at(B_2.size()-1);
+
                   }else{
                     t_begin=v.at(v.size()-2);
                     t_begin=qAbs(t_begin);
-                    //a_t=B_2.at((B_2.size()-1)/2);
-                    a_t=B_2.at(B_2.size()-1);
                   }
 
                    t_beginZ=v1.at(v1.size()-1);
 
-                   angle_begin=angle+a_t*57.3;
+                   //angle_begin=angle+a_t*57.3;
+                   //angle_=angle_begin/57.3;
+                   angle_begin=B_2.at(B_2.size()-1)*57.3;
+                   a_t=(angle_begin-angle)/57.3;
                    angle_=angle_begin/57.3;
               }else if(face=="凸面"){
+
                   if(radius=="半口径"){
                    t_begin=v.at(v.size()-1)+step;
 
@@ -227,9 +231,9 @@ void cal::calculateInsert(QVector<double> v, QVector<double> v1, QString radius,
 
                   }
 
-                  if(t_begin>=qAbs(R_)/sqrt(1+K_)){
+                 if(t_begin>qAbs(R_)/sqrt(1+K_)){
                      t_beginZ=v1.at(v1.size()-1);
-                     if(radius=="半口径"){
+                     /*if(radius=="半口径"){
                          a_t=B_2.at(B_2.size()-1);
                          angle_begin=angle+a_t*57.3;
                          angle_=angle_begin/57.3;
@@ -238,9 +242,11 @@ void cal::calculateInsert(QVector<double> v, QVector<double> v1, QString radius,
                          a_t=B_2.at(B_2.size()-1);
                          angle_begin=angle+a_t*57.3;
                          angle_=angle_begin/57.3;
-                     }
-
-                  }else if(t_begin<qAbs(R_)/sqrt(1+K_)){
+                     }*/
+                     angle_begin=B_2.at(B_2.size()-1)*57.3;
+                     a_t=(angle_begin-angle)/57.3;
+                     angle_=angle_begin/57.3;
+                  }else{
                       t_beginZ=(qPow(t_begin,2))/(R_*(1+qSqrt(1-(1+K_)*qPow(t_begin/R_,2))))+C1_+C2_*qPow(t_begin,2)+C3_*qPow(t_begin,4)+C4_*qPow(t_begin,6)+C5_*qPow(t_begin,8)+C6_*qPow(t_begin,10)+C7_*qPow(t_begin,12)+C8_*qPow(t_begin,14)+C9_*qPow(t_begin,16)+C10_*qPow(t_begin,18)+C11_*qPow(t_begin,20)+C12_*qPow(t_begin,22)
                                         +A1_*qPow(t_begin,2)+A2_*qPow(t_begin,3)+A3_*qPow(t_begin,4);
                       //G
@@ -262,10 +268,14 @@ void cal::calculateInsert(QVector<double> v, QVector<double> v1, QString radius,
               }
 
 
+          //判断符号
+          if(type=="LGS-200") {
+              a=-1;
+          }else{
+              a=1;
+          }
 
-          if(machine=="LGS-200") a=-1;
 
-          if(machine=="LGS-300") a=1;
           //定义信号量函数
 
               if(a_t>=0){
@@ -274,9 +284,13 @@ void cal::calculateInsert(QVector<double> v, QVector<double> v1, QString radius,
                  sign=-1;
               }
 
-
+              //顶点处，b=0
+              double ang1=angle/57.3;
+              x0=-(a*Lb+Lt-r_)*sin(ang1)-sign*Dm/2*(1-cos(ang1))-r_*sin(0);
+              z0=(a*Lb+Lt-r_)*(1-cos(ang1))-sign*Dm/2*sin(ang1)+r_*(1-cos(0));
               //切角
               double x1,x2,x3,z1,z2,z3,x,z;
+
 
               x1=-(a*Lb+Lt-r_)*sin(angle_);
               x2=-sign*Dm/2*(1-cos(angle_));
@@ -284,12 +298,14 @@ void cal::calculateInsert(QVector<double> v, QVector<double> v1, QString radius,
               z1=(a*Lb+Lt-r_)*(1-cos(angle_));
               z2=-sign*Dm/2*sin(angle_);
               z3=r_*(1-cos(a_t));
+
               //偏差值
               x=x1+x2+x3-x0;
               z=z1+z2+z3-z0;
 
 
               x_begin=a*(t_begin-x);
+              x_begin*=-1;
               z_begin=a*(t_beginZ-z);
 
 
@@ -465,8 +481,10 @@ QVector<QPointF> cal::calculatePoint(QString type, QVector<double> p)
             x0=-(a*Lb+Lt-r_)*sin(ang1)-sign*Dm/2*(1-cos(ang1))-r_*sin(0);
             z0=(a*Lb+Lt-r_)*(1-cos(ang1))-sign*Dm/2*sin(ang1)+r_*(1-cos(0));
             //对刀点
-            x_cal=Xbasic-a*(sign*(Dm/2)+x0);
-            z_cal=Zbasic-Hcenter-a*(0+z0);
+            //x_cal=Xbasic-a*(sign*(Dm/2)+x0);
+            //z_cal=Zbasic-Hcenter-a*(0+z0);
+            x_cal=Xbasic-sign*(Dm/2)-x0;
+            z_cal=Zbasic-Hcenter-z0;
             //切角
            double b=ang-angle/57.3;
             x1=-(a*Lb+Lt-r_)*sin(ang);
@@ -498,6 +516,7 @@ QVector<QPointF> cal::calculatePoint_real(QString type)
            z_a=position.at(i).y()-z0;
            x_real=a*(vec.at(i)-x_a);
            z_real=a*(vec_.at(i)-z_a);
+
            X_real<<x_real;
            Z_real<<z_real;
            real<<QPointF(x_real,z_real);
@@ -636,15 +655,18 @@ QVector<QString> cal::processCom(QVector<QPointF> a,QVector<QPointF> b,QVector<d
      total.clear();
 
      Z_1=calculateZD(a);
-     B_2=calculateAngle();
+     B_2=calculateAngle();//弧度
 
      dir_str=path;
      QString s=tellAngle(B_1);
+
+
      //理论
      for(int i=0;i<a.size();i++){
          vec<<a[i].x();
          vec_<<a[i].y();
      }
+
 
      if(s=="符合"){
          QVector<double> d=calculateClear(clear,single);
@@ -653,7 +675,7 @@ QVector<QString> cal::processCom(QVector<QPointF> a,QVector<QPointF> b,QVector<d
 
          QVector<QPointF> real;
          QVector<double> Z_real1;
-         for(int i=0;i<b.size();i++){
+         for(int i=0;i<r.size();i++){
 
             double t=b.at(i).y();
             double t1=r.at(i).y();
@@ -669,6 +691,7 @@ QVector<QString> cal::processCom(QVector<QPointF> a,QVector<QPointF> b,QVector<d
          chartDlg ch;
          ch.drawPlot(X_real,Z_real1,"补偿后");
          createExcel(real,"补偿后");
+         qDebug()<<vec.size()<<vec_.size()<<r.size()<<real.size()<<Z_real1.size()<<a.size()<<b.size();
      }else{
          MainWindow m;
 

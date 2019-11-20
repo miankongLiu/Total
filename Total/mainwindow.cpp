@@ -186,7 +186,6 @@ void MainWindow::calClear()
                      +A1*qPow(t,2)+A2*qPow(t,3)+A3*qPow(t,4);
 
             }
-
             vec_<<temp;
         }
 
@@ -199,8 +198,6 @@ void MainWindow::calClear()
         QPointF ex;
         ex.setX(t);
         ex.setY(t1);
-
-
         p1.push_back(ex);//存储理论点集
     }
 
