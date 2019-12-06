@@ -271,7 +271,7 @@ void cal::calculateInsert(QVector<double> v, QVector<double> v1, QString radius,
           //判断符号
           if(type=="LGS-200") {
               a=-1;
-          }else{
+          }else if(type=="LGS-300"){
               a=1;
           }
 
@@ -305,9 +305,8 @@ void cal::calculateInsert(QVector<double> v, QVector<double> v1, QString radius,
 
 
               x_begin=a*(t_begin-x);
-              x_begin*=-1;
+              x_begin*=-1;//
               z_begin=a*(t_beginZ-z);
-
 
 
 }
@@ -333,16 +332,31 @@ QVector<QString> cal::modifyNC(QVector<double> v, QVector<double> v1, QVector<do
 
            //凹凸面
            double z_safe=0.0;
-           if(face=="凸面"){
+           //11.29修改安全距离
+           if(machine.contains("200")){
+               if(face=="凸面"){
 
-               z_safe=-10;
+                   z_safe=-10;
 
 
-           }else if(face=="凹面"){
+               }else if(face=="凹面"){
 
-               z_safe=-(10+H);
+                   z_safe=-(10+H);
+               }
+           }else{
+               if(face=="凸面"){
+
+                   z_safe=10;
+
+
+               }else if(face=="凹面"){
+
+                   z_safe=(r_m/2+H);
+               }
+               qDebug()<<"safe"<<z_safe;
            }
-           qDebug()<<"safe"<<z_safe;
+
+
            QDateTime datetime;
            QString NC;
            QString timestr=datetime.currentDateTime().toString("yyyy-MM-dd-HH-mm-ss");
@@ -464,9 +478,13 @@ QVector<QPointF> cal::calculatePoint(QString type, QVector<double> p)
     double ang,x1,x2,x3,z1,z2,z3,x,z;
         QVector<QPointF> position;
         //判断符号
-        if(type=="LGS-200") a=-1;
+        if(type=="LGS-200"){
 
-        if(type=="LGS-300") a=1;
+            a=-1;
+         }
+        if(type=="LGS-300") {
+            a=1;
+            }
         //定义信号量函数
         for(int i=0;i<p.size();i++){
             //ang=p.at(i)/57.3;
@@ -483,8 +501,10 @@ QVector<QPointF> cal::calculatePoint(QString type, QVector<double> p)
             //对刀点
             //x_cal=Xbasic-a*(sign*(Dm/2)+x0);
             //z_cal=Zbasic-Hcenter-a*(0+z0);
-            x_cal=Xbasic-sign*(Dm/2)-x0;
+            x_cal=Xbasic-sign*(Dm/2)-x0;//200适用
+            //x_cal=Xbasic+a*(sign*(Dm/2))-x0;
             z_cal=Zbasic-Hcenter-z0;
+            //z_cal=Zbasic-Hcenter+a*z0;
             //切角
            double b=ang-angle/57.3;
             x1=-(a*Lb+Lt-r_)*sin(ang);
