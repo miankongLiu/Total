@@ -45,25 +45,7 @@ RESOURCES += \
     rs.qrc
 
 
-
-# .h文件搜索路径
-INCLUDEPATH += D:/Matlab/install/extern/include
-INCLUDEPATH += D:/Matlab/install/extern/include/Win64
-
-# 用到的MATLAB 的.lib库文件 及其搜索路径
-INCLUDEPATH += D:/Matlab/install/extern/lib/win64/microsoft
-DEPENDPATH += D:/Matlab/install/extern/lib/win64/microsoft
-
-win32: LIBS += -LD:/Matlab/install/extern/lib/win64/microsoft/ -llibmex
-win32: LIBS += -LD:/Matlab/install/extern/lib/win64/microsoft/ -llibmx
-win32: LIBS += -LD:/Matlab/install/extern/lib/win64/microsoft/ -llibmat
-win32: LIBS += -LD:/Matlab/install/extern/lib/win64/microsoft/ -llibeng
-win32: LIBS += -LD:/Matlab/install/extern/lib/win64/microsoft/ -lmclmcr
-win32: LIBS += -LD:/Matlab/install/extern/lib/win64/microsoft/ -lmclmcrrt
+INCLUDEPATH += D:\Qt\eigen-3.3.7\eigen-3.3.7
 
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/./ -lfitFunc
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/./ -lfitFunc
 
-INCLUDEPATH += $$PWD/.
-DEPENDPATH += $$PWD/.

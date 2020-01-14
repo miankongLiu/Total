@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="rs.qrc">
+    <normaloff>:/image/radio_selected.png</normaloff>:/image/radio_selected.png</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">QPalette{background:#F5F5F5;}QGroupBox#gboxDevicePanel&gt;QLabel{color:#000000;}
 
@@ -395,6 +399,19 @@ background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #F2F3F4,stop:1 
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
            <widget class="QLineEdit" name="le_file"/>
@@ -402,7 +419,7 @@ background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #F2F3F4,stop:1 
           <item>
            <widget class="QPushButton" name="pb_open">
             <property name="text">
-             <string>open</string>
+             <string>打开</string>
             </property>
            </widget>
           </item>
@@ -416,7 +433,7 @@ background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #F2F3F4,stop:1 
           <item>
            <widget class="QPushButton" name="pb_openf">
             <property name="text">
-             <string>open</string>
+             <string>打开</string>
             </property>
            </widget>
           </item>
@@ -428,7 +445,7 @@ background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #F2F3F4,stop:1 
            <string notr="true"/>
           </property>
           <property name="title">
-           <string>拟合选项</string>
+           <string>拟合&amp;插值</string>
           </property>
           <layout class="QGridLayout" name="gridLayout">
            <item row="0" column="0">
@@ -439,7 +456,7 @@ background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #F2F3F4,stop:1 
                 <string notr="true"/>
                </property>
                <property name="text">
-                <string>三次样条</string>
+                <string>三次B样条插值拟合</string>
                </property>
               </widget>
              </item>
@@ -454,17 +471,12 @@ height:20px;
 }</string>
                  </property>
                  <property name="text">
-                  <string>多项式</string>
+                  <string>最小二乘</string>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QComboBox" name="comboBox">
-                 <item>
-                  <property name="text">
-                   <string>1</string>
-                  </property>
-                 </item>
                  <item>
                   <property name="text">
                    <string>2</string>
@@ -478,11 +490,6 @@ height:20px;
                  <item>
                   <property name="text">
                    <string>4</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>5</string>
                   </property>
                  </item>
                 </widget>
@@ -509,14 +516,14 @@ height:20px;
           <item>
            <widget class="QPushButton" name="pb_fit">
             <property name="text">
-             <string>FIT</string>
+             <string>拟合</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="pb_stop">
             <property name="text">
-             <string>STOP</string>
+             <string>关闭</string>
             </property>
            </widget>
           </item>
@@ -569,6 +576,8 @@ height:20px;
    <header>qchartview.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="rs.qrc"/>
+ </resources>
  <connections/>
 </ui>
